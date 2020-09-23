@@ -40,3 +40,8 @@ To add custom cover art to specific episodes, just place a JPG file in the same 
 - <kbd>M</kbd> Mute
 - <kbd>0</kbd> to <kbd>9</kbd> Set volume, 100%, 0% to 90%
 - <kbd>F5</kbd> Refresh
+
+
+## Browser support
+
+This web portal should work in all major internet browsers (except from Internet Explorer, but if you still see that as a major internet browser, you're stuck in the past).
