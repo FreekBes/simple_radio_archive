@@ -19,7 +19,7 @@ The asterisk is actually not currently handled by this web portal. You can leave
 
 ## How to add new episodes
 
-Simply add the audio files for new episodes to the folder specified in settings.json. Make sure to follow the same naming scheme as described in settings.json. You could automate this process, for example using [streamripper](http://streamripper.sourceforge.net/ "Streamripper is a command line tool that rips internetradio streams).
+Simply add the audio files for new episodes to the folder specified in settings.json. Make sure to follow the same naming scheme as described in settings.json. You could automate this process, for example using [streamripper](http://streamripper.sourceforge.net/ "Streamripper is a command line tool that rips internetradio streams").
 
 
 ## Add custom cover art to episodes
