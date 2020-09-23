@@ -198,5 +198,40 @@ var aPlayer = {
         var curTime = aPlayer.getCurrentTime();
         if (curTime < aPlayer.getDuration() - 11)
             aPlayer.seekTo(curTime + 10);
+    },
+
+    volumeUp: function()
+    {
+        if (aPlayer.audio.volume < 0.9)
+            aPlayer.audio.volume += 0.1;
+        else
+            aPlayer.audio.volume = 1;
+    },
+
+    volumeDown: function()
+    {
+        if (aPlayer.audio.volume > 0.1)
+            aPlayer.audio.volume -= 0.1;
+        else
+            aPlayer.audio.volume = 0;
+    },
+
+    setVolume: function(vol)
+    {
+        aPlayer.audio.volume = vol;
+    },
+
+    mute: function()
+    {
+        if (aPlayer.audio.muted || aPlayer.audio.volume == 0)
+        {
+            aPlayer.audio.muted = false;
+            if (aPlayer.audio.volume < 0.1)
+                aPlayer.audio.volume = 0.1;
+        }
+        else
+        {
+            aPlayer.audio.muted = true;
+        }
     }
 };
