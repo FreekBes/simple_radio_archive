@@ -22,6 +22,12 @@ var aPlayer = {
             navigator.mediaSession.setActionHandler('pause', this.pause);
             navigator.mediaSession.setActionHandler('nexttrack', this.next);
             navigator.mediaSession.setActionHandler('previoustrack', this.previous);
+            navigator.mediaSession.setActionHandler('seekto', function(details) {
+                if (!details.fastSeek)
+                    aPlayer.seekTo(details.seekTime);
+            });
+            navigator.mediaSession.setActionHandler('seekbackward', this.skipBack);
+            navigator.mediaSession.setActionHandler('seekforward', this.skipForward);
             navigator.mediaSession.playbackState = "none";
         }
 
