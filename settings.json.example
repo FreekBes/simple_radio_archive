@@ -1,0 +1,60 @@
+{
+    "title": "Title of the webpage",
+    "sources": [
+        {
+            "metadata": {
+                "name": "Name of the radio show",
+                "short_name": "Short Name",
+                "default_img": "radio/logo.jpg",
+                "language": "NLD",
+                "source": {
+                    "name": "Name of the radio station",
+                    "website": "https://www.example.com/",
+                    "livestream_url": "https://www.example.com/icecast.mp3",
+                    "schedule": [
+                        {
+                            "months": [1, 4, 5, 7, 8, 9, 10, 11, 12],
+                            "days": [],
+                            "days_of_week": [1, 4, 7],
+                            "hours": [14],
+                            "minutes": [30],
+                            "duration": 120
+                        }
+                    ]
+                }
+            },
+            "files": {
+                "folder": "radio",
+                "name_struct": "RADIO_E%eeee%_%yyyy%_%mm%_%dd%_*.mp3",
+                "type": "mp3"
+            }
+        },
+        {
+            "metadata": {
+                "name": "Radio Show 2",
+                "short_name": "RS2",
+                "default_img": "radio2/img.jpg",
+                "language": "NLD",
+                "source": {
+                    "name": "Another radio station",
+                    "website": "https://www.example.com/",
+                    "livestream_url": "https://www.example.com/icecast2.ogg",
+                    "schedule": [
+                        {
+                            "months": [],
+                            "days": [],
+                            "days_of_week": [6],
+                            "hours": [22],
+                            "duration": 120
+                        }
+                    ]
+                }
+            },
+            "files": {
+                "folder": "radio2",
+                "name_struct": "ANOTHER_SHOW_E%eeee%_%yyyy%_%mm%_%dd%_TEST*.ogg",
+                "type": "ogg"
+            }
+        }
+    ]
+}

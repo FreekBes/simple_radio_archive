@@ -1,0 +1,308 @@
+html, body {
+    display: block;
+    width: 100%;
+}
+
+html {
+    padding: 0px;
+    margin: 0px;
+    background-color: #2A2A2A;
+    height: 100%;
+}
+
+body {
+    background-color: #333333;
+    color: #EDEDED;
+    font-family: Roboto, Verdana, Arial, Sans-Serif;
+    font-size: 16px;
+    padding: 0px;
+    cursor: default;
+    width: 100%;
+    max-width: 900px;
+    min-height: 100%;
+    min-width: 360px;
+    margin: 0 auto;
+    box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+    user-select: none;
+}
+
+a, a:visited {
+    color: #127940;
+}
+
+a:hover {
+    color: #23AD61;
+}
+
+header {
+    display: block;
+    height: 56px;
+    background-color: #127940;
+    color: #EDEDED;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0px 8px;
+}
+
+h1 {
+    display: inline-block;
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0px 8px;
+    margin: 0px;
+    line-height: 56px;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+main {
+    padding: 8px;
+    padding-bottom: 64px;
+}
+
+.source {
+    padding: 16px 0px;
+    border-bottom: solid 1px #555555;
+}
+
+.source:last-child {
+    border-bottom: none;
+}
+
+h2 {
+    margin: 0px 8px 8px 8px;
+}
+
+.ep, .ep:visited {
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    width: 156px;
+    padding: 8px 8px 24px 8px;
+}
+
+.ep:hover, .ep:focus {
+    background: rgba(255,255,255,.1);
+    color: #23AD61;
+    text-decoration: none;
+    outline: 0;
+}
+
+.ep img {
+    display: block;
+    width: 156px;
+    height: 156px;
+    object-fit: cover;
+    margin-bottom: 4px;
+    pointer-events: none;
+}
+
+footer {
+    display: block;
+    z-index: 100;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    max-width: 900px;
+    min-width: 400px;
+    margin: 0px;
+    padding: 0px;
+    white-space: nowrap;
+}
+
+#playerwrapper {
+    background-color: #212121;
+    box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+}
+
+#playerwrapper:before {
+    will-change: top,left;
+    box-shadow: 0 -4px 8px rgba(0,0,0,.28), 0 0 4px rgba(0,0,0,.14);
+    content: "";
+    height: 75px;
+    left: 0px;
+    bottom: 0px;
+    position: absolute;
+    width: 100%;
+    pointer-events: none;
+}
+
+#seekbarwrapper {
+    display: block;
+    position: absolute;
+    top: -18px;
+    left: 0px;
+    right: 0px;
+    height: 30px;
+    width: 100%;
+    margin: 0px;
+    z-index: 20;
+}
+
+#player-art {
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #1A1A1A;
+    width: 71px;
+    height: 71px;
+    pointer-events: none;
+}
+
+footer button.player-ctrl {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+    background: rgba(255,255,255,0);
+    opacity: 0.75;
+    border: none;
+    width: 51px;
+    height: 51px;
+    margin: 5px 3px 5px 3px;
+    font-size: 36px;
+    color: #EDEDED;
+}
+
+footer button.player-ctrl:hover, footer button.player-ctrl:focus {
+    opacity: 1;
+    outline: 0;
+}
+
+#play-pause {
+    width: 61px;
+    height: 61px;
+    font-size: 48px;
+}
+
+#metadata {
+    display: inline-block;
+    vertical-align: middle;
+    width: 80%;
+    max-width: 600px;
+    white-space: nowrap;
+}
+
+#metadata div {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+#player-title {
+    font-weight: bold;
+}
+
+#player-show {
+    color: #919191;
+}
+
+#player-extra {
+    color: #515151;
+    font-size: 12px;
+}
+
+::-moz-selection {
+    color: #FFFFFF;
+    background-color: rgba(18, 121, 64, 0.99);
+    text-shadow: none;
+}
+
+::selection {
+    color: #FFFFFF;
+    background-color: rgba(18, 121, 64, 0.99);
+    text-shadow: none;
+}
+
+/* seekbar */
+#progressbar-outer {
+    width: 100%;
+    height: 4px;
+    padding: 0px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    margin: 0px;
+    white-space: nowrap;
+    background-color: rgba(0,0,0,0);
+    position: relative;
+    cursor: default;
+    overflow: hidden;
+}
+
+#progressbar-outer .progressbar-inner {
+    width: 0%;
+    height: inherit;
+    position: absolute;
+    left: 0;
+    transition: 0.25s;
+    transition-timing-function: linear;
+}
+
+#progressbar-outer #barbackground {
+    width: 100%;
+    background-color: #434343;
+    z-index: 1;
+}
+
+#progressbar-outer #progressbar {
+    background-color: #23AD61;
+    transition: background-color 1s;
+    z-index: 3;
+}
+
+#progressbar-outer #bufferbar {
+    background-color: rgba(255,255,255,0.2);
+    z-index: 2;
+    transition-timing-function: ease;
+}
+
+#progressbar.hovering:after {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #23AD61;
+    transition: background-color 1s;
+    
+    position: absolute;
+    right: -5px;
+    top: -3px;
+    
+    animation: progresshover 0.1s 1 alternate ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes progresshover {
+    from {
+        
+    }
+    to {
+        width: 16px;
+        height: 16px;
+        border-radius: 8px;
+        right: -6px;
+        top: -6px;
+    }
+}
+
+@media screen and (max-width: 600px)
+{
+    .ep, .ep:visited {
+        width: 153px;
+    }
+
+    .ep img {
+        width: 153px;
+        height: 153px;
+    }
+}
+
+@media screen and (max-width: 450px)
+{
+    #skip-next {
+        display: none;
+    }
+}
