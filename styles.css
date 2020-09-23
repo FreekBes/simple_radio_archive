@@ -107,7 +107,6 @@ footer {
     bottom: 0px;
     width: 100%;
     max-width: 900px;
-    min-width: 400px;
     margin: 0px;
     padding: 0px;
     white-space: nowrap;
@@ -197,11 +196,21 @@ footer button.player-ctrl:hover, footer button.player-ctrl:focus {
 
 #player-show {
     color: #919191;
+    font-size: 14px;
 }
 
 #player-extra {
     color: #515151;
-    font-size: 12px;
+    font-size: 10px;
+}
+
+#player-times {
+    display: block;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    color: #515151;
+    font-size: 11px;
 }
 
 ::-moz-selection {
@@ -304,5 +313,16 @@ footer button.player-ctrl:hover, footer button.player-ctrl:focus {
 {
     #skip-next {
         display: none;
+    }
+
+    #play-pause {
+        margin: 0px;
+        width: 51px;
+        height: 71px;
+        font-size: 36px;
+    }
+
+    #player-times {
+        font-size: 10px;
     }
 }

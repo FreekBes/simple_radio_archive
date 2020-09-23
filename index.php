@@ -85,6 +85,7 @@
                 <div id="player-show"></div>
                 <div id="player-extra"></div>
             </div>
+            <div id="player-times"></div>
         </div>
     </footer>
     <script type="application/javascript" src="progressbar.js"></script>

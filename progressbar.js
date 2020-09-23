@@ -140,12 +140,7 @@ var progressBar = {
 			var audDuration = aPlayer.getDuration();
 			var timeToBeSet = (progressBar.getValue() / 100) * audDuration;
 			// aPlayer.seekTo(timeToBeSet);
-			
-			var progress = document.getElementById("curtime");
-			var duration = document.getElementById("duration");
-			if (progress != null && duration != null) {
-				aPlayer.updateTimes(timeToBeSet, audDuration);
-			}
+			aPlayer.updateTimes(timeToBeSet, audDuration);
 		}
 	},
 	

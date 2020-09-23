@@ -1,4 +1,21 @@
 var AudioContext = window.AudioContext || window.webkitAudioContext;
+function formatSeconds(seconds) {
+    var s = Math.floor(seconds % 60);
+    var m = Math.floor((seconds / 60) % 60);
+    var u = Math.floor(((seconds / 60) / 60 ) % 60);
+    if (m < 10) {
+        m = '0' + m;
+    }
+    if (s < 10) {
+        s = '0' + s;
+    }
+    if (u < 1) {
+        return (m + ':' + s);
+    }
+    else if (u >= 1) {
+        return (u + ':' + m + ':' + s);
+    }
+}
 
 var aPlayer = {
     initialized: false,
@@ -14,6 +31,7 @@ var aPlayer = {
         this.context = new AudioContext();
         this.track = this.context.createMediaElementSource(this.audio);
         this.track.connect(this.context.destination);
+        this.times = document.getElementById("player-times");
 
         if ('mediaSession' in navigator)
         {
@@ -35,7 +53,16 @@ var aPlayer = {
             if (aPlayer.cur != -1) {
                 if (!progressBar.hovering)
                 {
-                    progressBar.setValue(aPlayer.getCurrentTime() / aPlayer.getDuration() * 100);
+                    var ct = aPlayer.getCurrentTime();
+                    var dur = aPlayer.getDuration();
+                    if (dur)
+                    {
+                        progressBar.setValue(ct / dur * 100);
+                        aPlayer.updateTimes(ct, dur);
+                    }
+                    else {
+                        aPlayer.times.innerHTML = "";
+                    }
                 }
                 if (aPlayer.audio.buffered.length > 0)
                 {
@@ -67,6 +94,7 @@ var aPlayer = {
         var mdArtworkSize = aPlayer.list[num].getAttribute("data-artsize");
         var mdDate = aPlayer.list[num].getAttribute("data-date");
         document.getElementById("play-pause").innerHTML = "play_circle_outline";
+        aPlayer.times.innerHTML = "";
 
         progressBar.setValue(0);
         progressBar.setValueBuffer(0);
@@ -178,7 +206,7 @@ var aPlayer = {
 
     updateTimes: function(time, dur)
     {
-
+        aPlayer.times.innerHTML = formatSeconds(time) + " / " + formatSeconds(dur);
     },
 
     seekTo: function(time)
