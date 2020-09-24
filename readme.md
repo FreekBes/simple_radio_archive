@@ -22,6 +22,24 @@ The asterisk is actually not currently handled by this web portal. You can leave
 Simply add the audio files for new episodes to the folder specified in settings.json. Make sure to follow the same naming scheme as described in settings.json. You could automate this process, for example using [streamripper](http://streamripper.sourceforge.net/ "Streamripper is a command line tool that rips internetradio streams").
 
 
+## How to add livestreams
+
+Add a schedule to the settings.json file like in the example.
+
+```
+{
+  "day": 2          // the day of the week when a broadcast will occur. monday=0, sunday=6
+  "hour": 14        // the hour at which the broadcast will start
+  "minute": 30      // the minute in that hour at which the broadcast will start
+  "duration": 120   // the duration of this broadcast, in minutes
+}
+```
+
+Add as many schedule listings as you want. Seperate them with commas. If you don't understand how, please look up how JSON formatting works.
+
+After you've added your schedule, you'll need to add a livestream URL in the settings.json file as well. In order to play this audiostream directly in the web portal, the stream needs to be non-CORS restricted. If it is not, most major web browsers will refuse to play the content. Users will still be able to open the stream in a new tab though.
+
+
 ## Add custom cover art to episodes
 
 To add custom cover art to specific episodes, just place a JPG file in the same folder as the audio file, with the exact same name. The system will use this image file automatically. It does not need to be of any specific size, although a square image is recommended.
