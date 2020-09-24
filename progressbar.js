@@ -46,7 +46,7 @@ var progressBar = {
 	
 	progressMouseEnter: function(e) {
 		e=e || window.event;
-		if ((e.which == 1 || e.type == "touchstart") && aPlayer.cur != -1) {
+		if ((e.which == 1 || e.type == "touchstart") && aPlayer.cur > -1) {
 			progressBar.firstSeek = true;
 			aPlayer.pause();
 			progressBar.hovering = true;

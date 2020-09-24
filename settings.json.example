@@ -13,11 +13,9 @@
                     "livestream_url": "https://www.example.com/icecast.mp3",
                     "schedule": [
                         {
-                            "months": [1, 4, 5, 7, 8, 9, 10, 11, 12],
-                            "days": [],
-                            "days_of_week": [1, 4, 7],
-                            "hours": [14],
-                            "minutes": [30],
+                            "day": 2,
+                            "hour": 14,
+                            "minute": 30,
                             "duration": 120
                         }
                     ]
@@ -41,11 +39,16 @@
                     "livestream_url": "https://www.example.com/icecast2.ogg",
                     "schedule": [
                         {
-                            "months": [],
-                            "days": [],
-                            "days_of_week": [6],
-                            "hours": [22],
+                            "day": 0,
+                            "hour": 22,
+                            "minute": 0,
                             "duration": 120
+                        },
+                        {
+                            "day": 6,
+                            "hour": 9,
+                            "minute": 30,
+                            "duration": 60
                         }
                     ]
                 }

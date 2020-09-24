@@ -75,29 +75,72 @@ h2 {
     margin: 0px 8px 8px 8px;
 }
 
-.ep, .ep:visited {
+.next-broadcast
+{
+    margin: 0px 8px 18px 8px;
+    font-size: 12px;
+}
+
+.ep, .ep:visited, .live, .live:visited {
+    position: relative;
     display: inline-block;
     cursor: pointer;
     text-decoration: none;
     color: inherit;
     width: 156px;
     padding: 8px 8px 24px 8px;
+    background: rgba(255,255,255,0);
 }
 
-.ep:hover, .ep:focus {
-    background: rgba(255,255,255,.1);
+.ep:hover, .ep:focus, .live:hover, .live:focus {
+    background: rgba(255,255,255,.1) !important;
     color: #23AD61;
     text-decoration: none;
     outline: 0;
 }
 
-.ep img {
+.live.anim {
+    animation: attentionlivefull 3s 8;
+}
+
+@keyframes attentionlivefull {
+    0% { background-color: rgba(255,255,255,0) }
+    50% { background-color: rgba(255,255,255,0.2) }
+    100% { background-color: rgba(255,255,255,0) }
+}
+
+.ep img, .live img {
     display: block;
     width: 156px;
     height: 156px;
     object-fit: cover;
     margin-bottom: 4px;
     pointer-events: none;
+}
+
+.live:before {
+    box-shadow: 0 -4px 8px rgba(0,0,0,.28), 0 0 4px rgba(0,0,0,.4);
+    content: "LIVE";
+    padding: 2px 4px;
+    color: #FFFFFF;
+    background: #D81515;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 3px;
+    opacity: 1;
+}
+
+.live.anim:before {
+    animation: attentionlive 3s 8;
+}
+
+@keyframes attentionlive {
+    0% { opacity: 1 }
+    50% { opacity: 0.5 }
+    100% { opacity: 1 }
 }
 
 footer {
@@ -118,7 +161,6 @@ footer {
 }
 
 #playerwrapper:before {
-    will-change: top,left;
     box-shadow: 0 -4px 8px rgba(0,0,0,.28), 0 0 4px rgba(0,0,0,.14);
     content: "";
     height: 75px;
@@ -299,11 +341,11 @@ footer button.player-ctrl:hover, footer button.player-ctrl:focus {
 
 @media screen and (max-width: 600px)
 {
-    .ep, .ep:visited {
+    .ep, .ep:visited, .live, .live:visited {
         width: 153px;
     }
 
-    .ep img {
+    .ep img, .live img {
         width: 153px;
         height: 153px;
     }
