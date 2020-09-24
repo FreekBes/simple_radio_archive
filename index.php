@@ -79,9 +79,11 @@
         <?php foreach($settings["sources"] as $source) { ?>
         <div class="source">
             <h2><?php echo($source["metadata"]["name"]); ?></h2>
-            <?PHP $schedule = get_next_broadcast_times($source["metadata"]["source"]["schedule"]);?>
-            <p class="next-broadcast">The <b>next broadcast</b> will be on <b><?php echo date("l", $schedule[0]); ?> the <?php echo date("jS", $schedule[0]); ?>, at <?php echo date("g:i A", $schedule[0]); ?></b>. You will be able to listen to the broadcast live, right here!</p>
+            <?php if (count($source["metadata"]["source"]["schedule"]) > 0) { ?>
+                <?php $schedule = get_next_broadcast_times($source["metadata"]["source"]["schedule"]); ?>
+                <p class="next-broadcast">The <b>next broadcast</b> will be on <b><?php echo date("l", $schedule[0]); ?> the <?php echo date("jS", $schedule[0]); ?>, at <?php echo date("g:i A", $schedule[0]); ?></b>. You will be able to listen to the broadcast live, right here!</p>
             <?php
+            }
             if (empty($source["eps"]))
             {
                 add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], 1, $source["metadata"]["default_img"]);
