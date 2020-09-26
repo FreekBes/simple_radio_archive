@@ -11,6 +11,7 @@
                     "name": "Name of the radio station",
                     "website": "https://www.example.com/",
                     "livestream_url": "https://www.example.com/icecast.mp3",
+                    "streamripper_fix_enabled": false,
                     "schedule": [
                         {
                             "day": 2,
@@ -37,6 +38,7 @@
                     "name": "Another radio station",
                     "website": "https://www.example.com/",
                     "livestream_url": "https://www.example.com/icecast2.ogg",
+                    "streamripper_fix_enabled": false,
                     "schedule": [
                         {
                             "day": 0,

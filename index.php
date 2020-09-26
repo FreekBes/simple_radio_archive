@@ -35,16 +35,16 @@
         return array($nextStart, $nextEnd);
     }
 
-    function add_live_episode($schedule, $stream_url, $station, $showname, $ep_num, $coverart)
+    function add_live_episode($schedule, $stream_url, $station, $showname, $ep_num, $coverart, $is_live)
     {
-        if (count($schedule) > 0)
+        if (count($schedule) > 0 && !empty($stream_url))
         {
             $times = get_next_broadcast_times($schedule);
             $date = date("Y-m-d", $times[0]);
             $ep_name = "Episode " . intval($ep_num);
             $coverart_dimens = getimagesize($coverart);
             $coverart_dimens = $coverart_dimens[0] . "x" . $coverart_dimens[1];
-            echo '<a style="display: none;" class="live" href="'.$stream_url.'" data-schedule="'.implode('/', $times).'" data-schedule-readable="'.date("Y-m-d H:i:s", $times[0]).'/'.date("Y-m-d H:i:s", $times[1]).'" data-radio="'.$station.'" data-show="'.$showname.'" data-epnum="'.$ep_num.'" data-epname="'.$ep_name.'" data-art="'.$coverart.'" data-artsize="'.$coverart_dimens.'" data-date="'.$date.'" onclick="event.preventDefault(); aPlayer.openLive(this); this.blur(); return false;"><img loading="lazy" src="'.$coverart.'" /><b>'.$ep_name.'</b><br><small><i>Live right now!</i></small></a>';
+            echo '<a '.($is_live ? '' : 'style="display: none;" ').'class="live" href="'.$stream_url.'" data-schedule="'.implode('/', $times).'" data-schedule-readable="'.date("Y-m-d H:i:s", $times[0]).'/'.date("Y-m-d H:i:s", $times[1]).'" data-radio="'.$station.'" data-show="'.$showname.'" data-epnum="'.$ep_num.'" data-epname="'.$ep_name.'" data-art="'.$coverart.'" data-artsize="'.$coverart_dimens.'" data-date="'.$date.'" onclick="event.preventDefault(); aPlayer.openLive(this); this.blur(); return false;"><img loading="lazy" src="'.$coverart.'" /><b>'.$ep_name.'</b><br><small><i>Live right now!</i></small></a>';
         }
     }
 
@@ -86,7 +86,7 @@
             }
             if (empty($source["eps"]))
             {
-                add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], 1, $source["metadata"]["default_img"]);
+                add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], 1, $source["metadata"]["default_img"], false);
                 echo '<p class="no-eps">No episodes have been uploaded as of yet.</p>';
             }
             else {
@@ -106,10 +106,17 @@
                     }
                     $coverart_dimens = getimagesize($coverart);
                     $coverart_dimens = $coverart_dimens[0] . "x" . $coverart_dimens[1];
-                    if (!$firstAdded)
+                    if (!$firstAdded && count($source["metadata"]["source"]["schedule"]) > 0)
                     {
-                        add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], $ep_num+1, $source["metadata"]["default_img"]);
                         $firstAdded = true;
+                        if (time() >= $schedule[0] && time() < $schedule[1] && $source["metadata"]["source"]["streamripper_fix_enabled"])
+                        {
+                            add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], $ep_num, $source["metadata"]["default_img"], true);
+                            continue;
+                        }
+                        else {
+                            add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], $ep_num+1, $source["metadata"]["default_img"], false);
+                        }
                     }
                     ?>
                     <a class="ep" href="<?php echo $audio; ?>" data-show="<?php echo $source["metadata"]["name"]; ?>" data-epnum="<?php echo $ep_num; ?>" data-epname="<?php echo $ep_name; ?>" data-art="<?php echo $coverart; ?>" data-artsize="<?php echo $coverart_dimens; ?>" data-date="<?php echo $date; ?>" onclick="event.preventDefault(); aPlayer.open(<?php echo($eNum++); ?>); this.blur(); return false;"><img loading="lazy" src="<?php echo $coverart; ?>" /><b><?php echo $ep_name; ?></b><br><small><?php echo $date; ?></small></a>

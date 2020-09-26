@@ -39,6 +39,8 @@ Add as many schedule listings as you want. Seperate them with commas. If you don
 
 After you've added your schedule, you'll need to add a livestream URL in the settings.json file as well. In order to play this audiostream directly in the web portal, the stream needs to be non-CORS restricted. If it is not, most major web browsers will refuse to play the content. Users will still be able to open the stream in a new tab though.
 
+If you're using streamripper to rip the episode directly into the folder listed in settings.json, enable the streamripper fix by setting "streamripper_fix_enabled" to true in settings.json. If you do not do this, the livestream will likely display the wrong episode number while ripping the stream, and the incomplete stream rip will be visible in the web portal.
+
 
 ## Add custom cover art to episodes
 
