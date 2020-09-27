@@ -113,15 +113,15 @@ var aPlayer = {
                     }
                 ]
             });
+            navigator.mediaSession.setActionHandler('seekto', function(details) {
+                if (!details.fastSeek)
+                    aPlayer.seekTo(details.seekTime);
+            });
+            navigator.mediaSession.setActionHandler('seekbackward', this.skipBack);
+            navigator.mediaSession.setActionHandler('seekforward', this.skipForward);
         }
 
         document.getElementById("player-extra").innerHTML = "Broadcasted on " + mdDate;
-        navigator.mediaSession.setActionHandler('seekto', function(details) {
-            if (!details.fastSeek)
-                aPlayer.seekTo(details.seekTime);
-        });
-        navigator.mediaSession.setActionHandler('seekbackward', this.skipBack);
-        navigator.mediaSession.setActionHandler('seekforward', this.skipForward);
 
         aPlayer.cur = num;
         aPlayer.audio.src = audioSrc;
@@ -169,12 +169,12 @@ var aPlayer = {
                     }
                 ]
             });
+            navigator.mediaSession.setActionHandler('seekto', null);
+            navigator.mediaSession.setActionHandler('seekbackward', null);
+            navigator.mediaSession.setActionHandler('seekforward', null);
         }
 
         document.getElementById("player-extra").innerHTML = "Live <i>right now</i> on " + mdRadio;
-        navigator.mediaSession.setActionHandler('seekto', null);
-        navigator.mediaSession.setActionHandler('seekbackward', null);
-        navigator.mediaSession.setActionHandler('seekforward', null);
 
         aPlayer.cur = -2;
         aPlayer.audio.src = audioSrc;
