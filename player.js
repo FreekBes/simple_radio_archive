@@ -1,4 +1,3 @@
-var AudioContext = window.AudioContext || window.webkitAudioContext;
 function formatSeconds(seconds) {
     var s = Math.floor(seconds % 60);
     var m = Math.floor((seconds / 60) % 60);
@@ -27,9 +26,6 @@ var aPlayer = {
         this.list = document.getElementsByClassName("ep");
         this.epamount = this.list.length;
         this.audio = new Audio();
-        this.context = new AudioContext();
-        this.track = this.context.createMediaElementSource(this.audio);
-        this.track.connect(this.context.destination);
         this.times = document.getElementById("player-times");
 
         if ('mediaSession' in navigator)
