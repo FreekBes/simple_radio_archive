@@ -12,9 +12,11 @@ Download this repository. Then create a settings.json file, structured like sett
 
 ## File name structure of the audio files
 
-Audio files should have a specific naming scheme. This naming scheme must be set in settings.json and can differ per radio show. An example: for the scheme `RADIO_E%eeee%_%yyyy%_%mm%_%dd%_*.mp3`, all files should start with `RADIO_E`, then have an episode number of 4 characters in length (so 0000 to 9999), followed by an underscore, the year of the broadcast, an underscore, the month of the broadcast, an underscore, the day of the broadcast, an underscore, then anything can follow (as stated by the asterisk). For this example the names must end in `.mp3`.
+Audio files should have a specific naming scheme. This naming scheme must be set in settings.json and can differ per radio show. An example: for the scheme `RADIO_E%eeee%_%yyyy%_%mm%_%dd%_*`, all files should start with `RADIO_E`, then have an episode number of 4 characters in length (so 0000 to 9999), followed by an underscore, the year of the broadcast, an underscore, the month of the broadcast, an underscore, the day of the broadcast, an underscore, then anything can follow (as stated by the asterisk).
 
 The asterisk is actually not currently handled by this web portal. You can leave it out, although I do plan on implementing it in the future, so for the sake of it - don't use any asterisks in the filenames! The same goes for percentage signs, obviously.
+
+If you have audio files with different extensions, you must include every extension in the "type" list in settings.json (see second show in settings.json.example).
 
 
 ## How to add new episodes

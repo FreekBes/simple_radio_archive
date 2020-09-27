@@ -24,8 +24,8 @@
             },
             "files": {
                 "folder": "radio",
-                "name_struct": "RADIO_E%eeee%_%yyyy%_%mm%_%dd%_*.mp3",
-                "type": "mp3"
+                "name_struct": "RADIO_E%eeee%_%yyyy%_%mm%_%dd%_*",
+                "type": ["mp3"]
             }
         },
         {
@@ -57,8 +57,8 @@
             },
             "files": {
                 "folder": "radio2",
-                "name_struct": "ANOTHER_SHOW_E%eeee%_%yyyy%_%mm%_%dd%_TEST*.ogg",
-                "type": "ogg"
+                "name_struct": "ANOTHER_SHOW_E%eeee%_%yyyy%_%mm%_%dd%_TEST*",
+                "type": ["ogg", "mp3"]
             }
         }
     ]

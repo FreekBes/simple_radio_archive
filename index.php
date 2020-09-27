@@ -52,7 +52,7 @@
     $files = null;
     for ($i = 0; $i < count($settings["sources"]); $i++)
     {
-        $settings["sources"][$i]["eps"] = array_reverse(glob($settings["sources"][$i]["files"]["folder"] . "/*." . $settings["sources"][$i]["files"]["type"]));
+        $settings["sources"][$i]["eps"] = array_reverse(glob($settings["sources"][$i]["files"]["folder"] . "/*.{" . implode(",", $settings["sources"][$i]["files"]["type"]) . "}", GLOB_BRACE));
     }
 
     $eNum = 0;
@@ -93,6 +93,7 @@
                 $firstAdded = false;
                 foreach($source["eps"] as $audio)
                 {
+                    $ext = pathinfo($audio, PATHINFO_EXTENSION);
                     $ep_num = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "e");
                     $year = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "y");
                     $month = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "m");
@@ -100,9 +101,9 @@
                     $ep_name = "Episode " . intval($ep_num);
                     $date = $year . "-" . $month . "-" . $day;
                     $coverart = $source["metadata"]["default_img"];
-                    if (file_exists(str_replace(".mp3", ".jpg", $audio)))
+                    if (file_exists(str_replace(".".$ext, ".jpg", $audio)))
                     {
-                        $coverart = str_replace(".mp3", ".jpg", $audio);
+                        $coverart = str_replace(".".$ext, ".jpg", $audio);
                     }
                     $coverart_dimens = getimagesize($coverart);
                     $coverart_dimens = $coverart_dimens[0] . "x" . $coverart_dimens[1];
