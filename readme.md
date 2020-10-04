@@ -16,7 +16,7 @@ Audio files should have a specific naming scheme. This naming scheme must be set
 
 The asterisk is actually not currently handled by this web portal. You can leave it out, although I do plan on implementing it in the future, so for the sake of it - don't use any asterisks in the filenames! The same goes for percentage signs, obviously.
 
-If you have audio files with different extensions, you must include every extension in the "type" list in settings.json (see second show in settings.json.example).
+If you have audio files with different extensions, you must include every extension in the "type" list in settings.json (see second show in settings.json.example). These should be listed in chronological order (most recently used extensions first).
 
 
 ## How to add new episodes
