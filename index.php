@@ -63,6 +63,8 @@
     <title><?php echo $settings["title"]; ?></title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<link rel="icon" type="image/ico" href="favicon.ico" />
     <meta name="debug-time" content="<?PHP echo date("Y-m-d H:i:s"); ?>" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#127940" />
