@@ -80,7 +80,7 @@
     <main>
         <?php foreach($settings["sources"] as $source) { ?>
         <div class="source">
-            <h2><?php echo($source["metadata"]["name"]); ?></h2>
+            <h2 name="<?php echo(strtolower($source["metadata"]["short_name"])); ?>" id="<?php echo(strtolower($source["metadata"]["short_name"])); ?>"><?php echo($source["metadata"]["name"]); ?></h2>
             <?php if (count($source["metadata"]["source"]["schedule"]) > 0) { ?>
                 <?php $schedule = get_next_broadcast_times($source["metadata"]["source"]["schedule"]); ?>
                 <p class="next-broadcast">The <b>next broadcast</b> will be on <b><?php echo date("l", $schedule[0]); ?> the <?php echo date("jS", $schedule[0]); ?>, at <?php echo date("g:i A", $schedule[0]); ?></b>. You will be able to listen to the broadcast live, right here!</p>
@@ -106,6 +106,10 @@
                     if (file_exists(str_replace(".".$ext, ".jpg", $audio)))
                     {
                         $coverart = str_replace(".".$ext, ".jpg", $audio);
+                    }
+                    else if (file_exists($source["files"]["folder"]."/".$source["metadata"]["short_name"]."_".$source["metadata"]["language"]."_E".$ep_num.".jpg"))
+                    {
+                        $coverart = $source["files"]["folder"]."/".$source["metadata"]["short_name"]."_".$source["metadata"]["language"]."_E".$ep_num.".jpg";
                     }
                     $coverart_dimens = getimagesize($coverart);
                     $coverart_dimens = $coverart_dimens[0] . "x" . $coverart_dimens[1];
