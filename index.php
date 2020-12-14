@@ -67,7 +67,7 @@
 <head>
     <title><?php echo $settings["title"]; ?></title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" type="text/css" href="styles-v2.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="icon" type="image/ico" href="favicon.ico" />
     <meta name="debug-time" content="<?PHP echo date("Y-m-d H:i:s"); ?>" />
@@ -168,14 +168,23 @@
         function expandShow(elem)
         {
             elem.blur();
-            elem.style.display = "none";
             var hiddenEps = elem.parentNode.getElementsByClassName("hidden");
             var hiddenCount = hiddenEps.length;
+            var lastUnhidden = null;
             // use hiddenEps[0] since hiddenEps[i] will skip over episodes since the amount of episodes in hiddenEps
             // will decrease with every loop
-            for (var i = 0; i < hiddenCount; i++)
+            for (var i = 0; i < hiddenCount && i < 30; i++)
             {
+                lastUnhidden = hiddenEps[0];
                 hiddenEps[0].className = "ep";
+            }
+            if (hiddenEps.length == 0 || lastUnhidden == null)
+            {
+                elem.style.display = "none";
+            }
+            else if (lastUnhidden != null)
+            {
+                elem.parentNode.insertBefore(elem, lastUnhidden.nextSibling);
             }
         }
         </script>
