@@ -1,6 +1,6 @@
 # Simple Radio Archive
 
-A simple web portal to an even simpler radio show archive.
+A simple web portal to an even simpler radio show archive. It features an overview of all episodes on the server, as well as a built-in audio player.
 
 
 ## How to set up
