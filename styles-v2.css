@@ -58,6 +58,7 @@ h1 {
 }
 
 main {
+    text-align: center;
     padding: 8px;
     padding-bottom: 64px;
 }
@@ -168,12 +169,15 @@ footer {
     display: block;
     z-index: 100;
     position: fixed;
-    bottom: 0px;
+    bottom: -90px;
     width: 100%;
     max-width: 900px;
     margin: 0px;
     padding: 0px;
     white-space: nowrap;
+    will-change: bottom;
+    transition: bottom 0.3s;
+    transition-timing-function: ease-in-out;
 }
 
 #playerwrapper {

@@ -122,6 +122,8 @@ var aPlayer = {
         }
 
         document.getElementById("player-extra").innerHTML = "Broadcasted on " + mdDate;
+        
+        document.getElementsByTagName("footer")[0].style.bottom = "0px";
 
         aPlayer.cur = num;
         aPlayer.audio.src = audioSrc;
@@ -175,6 +177,8 @@ var aPlayer = {
         }
 
         document.getElementById("player-extra").innerHTML = "Live <i>right now</i> on " + mdRadio;
+
+        document.getElementsByTagName("footer")[0].style.bottom = "0px";
 
         aPlayer.cur = -2;
         aPlayer.audio.src = audioSrc;
