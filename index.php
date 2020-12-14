@@ -48,6 +48,11 @@
         }
     }
 
+    function add_show_more_button($showname)
+    {
+        echo '<button class="show-more" onclick="expandShow(this);">View older '.$showname.' episodes</button>';
+    }
+
     $settings = json_decode(file_get_contents("settings.json"), true);
     $files = null;
     for ($i = 0; $i < count($settings["sources"]); $i++)
@@ -91,10 +96,13 @@
                 add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], 1, $source["metadata"]["default_img"], false);
                 echo '<p class="no-eps">No episodes have been uploaded as of yet.</p>';
             }
-            else {
+            else
+            {
                 $firstAdded = false;
+                $c = 0;
                 foreach($source["eps"] as $audio)
                 {
+                    $c++;
                     $ext = pathinfo($audio, PATHINFO_EXTENSION);
                     $ep_num = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "e");
                     $year = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "y");
@@ -125,15 +133,20 @@
                             add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], $ep_num+1, $source["metadata"]["default_img"], false);
                         }
                     }
+                    if ($c == 11)
+                    {
+                        add_show_more_button($source["metadata"]["short_name"]);
+                    }
                     ?>
-                    <a class="ep" href="<?php echo $audio; ?>" data-show="<?php echo $source["metadata"]["name"]; ?>" data-epnum="<?php echo $ep_num; ?>" data-epname="<?php echo $ep_name; ?>" data-art="<?php echo $coverart; ?>" data-artsize="<?php echo $coverart_dimens; ?>" data-date="<?php echo $date; ?>" onclick="event.preventDefault(); aPlayer.open(<?php echo($eNum++); ?>); this.blur(); return false;"><img loading="lazy" src="<?php echo $coverart; ?>" /><b><?php echo $ep_name; ?></b><br><small><?php echo $date; ?></small></a>
+                    <a class="ep<?php echo ($c > 10 ? " hidden" : ""); ?>" href="<?php echo $audio; ?>" data-show="<?php echo $source["metadata"]["name"]; ?>" data-epnum="<?php echo $ep_num; ?>" data-epname="<?php echo $ep_name; ?>" data-art="<?php echo $coverart; ?>" data-artsize="<?php echo $coverart_dimens; ?>" data-date="<?php echo $date; ?>" onclick="event.preventDefault(); aPlayer.open(<?php echo($eNum++); ?>); this.blur(); return false;"><img loading="lazy" src="<?php echo $coverart; ?>" /><b><?php echo $ep_name; ?></b><br><small><?php echo $date; ?></small></a>
                     <?php
                 }
             } ?>
         </div>
         <?php } ?>
         <script>
-        setInterval(function() {
+        setInterval(function()
+        {
             var livestreams = document.getElementsByClassName("live");
             var curTimestamp = Math.floor(new Date().getTime() / 1000);
             for (c = 0; c < livestreams.length; c++)
@@ -151,6 +164,20 @@
                 }
             }
         }, 1000);
+        
+        function expandShow(elem)
+        {
+            elem.blur();
+            elem.style.display = "none";
+            var hiddenEps = elem.parentNode.getElementsByClassName("hidden");
+            var hiddenCount = hiddenEps.length;
+            // use hiddenEps[0] since hiddenEps[i] will skip over episodes since the amount of episodes in hiddenEps
+            // will decrease with every loop
+            for (var i = 0; i < hiddenCount; i++)
+            {
+                hiddenEps[0].className = "ep";
+            }
+        }
         </script>
     </main>
     <footer>
