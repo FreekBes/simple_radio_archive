@@ -46,7 +46,7 @@ If you're using streamripper to rip the episode directly into the folder listed 
 
 ## Add custom cover art to episodes
 
-To add custom cover art to specific episodes, just place a JPG file in the same folder as the audio file, with the exact same name. The system will use this image file automatically. It does not need to be of any specific size, although a square image is recommended.
+To add custom cover art to specific episodes, just place a JPG file in the same folder as the audio file, with the exact same name (although the date part is not required). The system will use this image file automatically. It does not need to be of any specific size, although a square image is recommended.
 
 
 ## Keyboard shortcuts
