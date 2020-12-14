@@ -1,4 +1,6 @@
 <?php
+    $v = "2.3";
+
     function get_filename_struct_part($filename, $filename_struct, $struct_part)
     {
         $p_start = strpos($filename_struct, "%".$struct_part);
@@ -67,7 +69,7 @@
 <head>
     <title><?php echo $settings["title"]; ?></title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="styles-v2.css" />
+    <link rel="stylesheet" type="text/css" href="styles.css?v=<?php echo $v; ?>" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="icon" type="image/ico" href="favicon.ico" />
     <meta name="debug-time" content="<?PHP echo date("Y-m-d H:i:s"); ?>" />
@@ -209,8 +211,8 @@
             <div id="player-times"></div>
         </div>
     </footer>
-    <script type="application/javascript" src="progressbar.js"></script>
-    <script type="application/javascript" src="player.js"></script>
-    <script type="application/javascript" src="kbd.js"></script>
+    <script type="application/javascript" src="progressbar.js?v=<?php echo $v; ?>"></script>
+    <script type="application/javascript" src="player.js?v=<?php echo $v; ?>"></script>
+    <script type="application/javascript" src="kbd.js?v=<?php echo $v; ?>"></script>
 </body>
 </html>
