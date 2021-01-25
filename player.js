@@ -1,15 +1,13 @@
 function formatSeconds(seconds) {
+    seconds = Number(seconds);
+    var h = Math.floor(seconds / 3600);
+    var m = Math.floor(seconds % 3600 / 60);
     var s = Math.floor(seconds % 60);
-    var m = Math.floor((seconds / 60) % 60);
-    var u = Math.floor(((seconds / 60) / 60 ) % 60);
-    if (m < 10)
-        m = '0' + m;
-    if (s < 10)
-        s = '0' + s;
-    if (u < 1)
-        return (m + ':' + s);
-    else if (u >= 1)
-        return (u + ':' + m + ':' + s);
+    
+    var hDisplay = h > 0 ? h + ":" : "";
+    var mDisplay = m > 0 ? (m < 10 ? "0" : "") + m + ":" : "00:";
+    var sDisplay = s > 0 ? (s < 10 ? "0" : "") + s : "00";
+    return hDisplay + mDisplay + sDisplay;
 }
 
 var aPlayer = {
