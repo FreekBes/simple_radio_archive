@@ -1,65 +1,65 @@
 {
-    "title": "Title of the webpage",
-    "sources": [
-        {
-            "metadata": {
-                "name": "Name of the radio show",
-                "short_name": "Short Name",
-                "default_img": "radio/logo.jpg",
-                "language": "NLD",
-                "source": {
-                    "name": "Name of the radio station",
-                    "website": "https://www.example.com/",
-                    "livestream_url": "https://www.example.com/icecast.mp3",
-                    "streamripper_fix_enabled": false,
-                    "schedule": [
-                        {
-                            "day": 2,
-                            "hour": 14,
-                            "minute": 30,
-                            "duration": 120
-                        }
-                    ]
-                }
-            },
-            "files": {
-                "folder": "radio",
-                "name_struct": "RADIO_E%eeee%_%yyyy%_%mm%_%dd%_*",
-                "type": ["mp3"]
-            }
-        },
-        {
-            "metadata": {
-                "name": "Radio Show 2",
-                "short_name": "RS2",
-                "default_img": "radio2/img.jpg",
-                "language": "NLD",
-                "source": {
-                    "name": "Another radio station",
-                    "website": "https://www.example.com/",
-                    "livestream_url": "https://www.example.com/icecast2.ogg",
-                    "streamripper_fix_enabled": false,
-                    "schedule": [
-                        {
-                            "day": 0,
-                            "hour": 22,
-                            "minute": 0,
-                            "duration": 120
-                        },
-                        {
-                            "day": 6,
-                            "hour": 9,
-                            "minute": 30,
-                            "duration": 60
-                        }
-                    ]
-                }
-            },
-            "files": {
-                "folder": "radio2",
-                "name_struct": "ANOTHER_SHOW_E%eeee%_%yyyy%_%mm%_%dd%_TEST*",
-                "type": ["ogg", "mp3"]
-            }
-        }
-    ]
+	"title": "Title of the webpage",
+	"sources": [
+		{
+			"metadata": {
+				"name": "Name of the radio show",
+				"short_name": "Short Name",
+				"default_img": "radio/logo.jpg",
+				"language": "NLD",
+				"source": {
+					"name": "Name of the radio station",
+					"website": "https://www.example.com/",
+					"livestream_url": "https://www.example.com/icecast.mp3",
+					"streamripper_fix_enabled": false,
+					"schedule": [
+						{
+							"day": 2,
+							"hour": 14,
+							"minute": 30,
+							"duration": 120
+						}
+					]
+				}
+			},
+			"files": {
+				"folder": "radio",
+				"name_struct": "RADIO_E%eeee%_%yyyy%_%mm%_%dd%_*",
+				"type": ["mp3"]
+			}
+		},
+		{
+			"metadata": {
+				"name": "Radio Show 2",
+				"short_name": "RS2",
+				"default_img": "radio2/img.jpg",
+				"language": "NLD",
+				"source": {
+					"name": "Another radio station",
+					"website": "https://www.example.com/",
+					"livestream_url": "https://www.example.com/icecast2.ogg",
+					"streamripper_fix_enabled": false,
+					"schedule": [
+						{
+							"day": 0,
+							"hour": 22,
+							"minute": 0,
+							"duration": 120
+						},
+						{
+							"day": 6,
+							"hour": 9,
+							"minute": 30,
+							"duration": 60
+						}
+					]
+				}
+			},
+			"files": {
+				"folder": "radio2",
+				"name_struct": "ANOTHER_SHOW_E%eeee%_%yyyy%_%mm%_%dd%_TEST*",
+				"type": ["ogg", "mp3"]
+			}
+		}
+	]
 }

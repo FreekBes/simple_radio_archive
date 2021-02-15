@@ -1,395 +1,395 @@
 html, body {
-    display: block;
-    width: 100%;
+	display: block;
+	width: 100%;
 }
 
 html {
-    padding: 0px;
-    margin: 0px;
-    background-color: #2A2A2A;
-    height: 100%;
+	padding: 0px;
+	margin: 0px;
+	background-color: #2A2A2A;
+	height: 100%;
 }
 
 body {
-    background-color: #333333;
-    color: #EDEDED;
-    font-family: Roboto, Verdana, Arial, Sans-Serif;
-    font-size: 16px;
-    padding: 0px;
-    cursor: default;
-    width: 100%;
-    max-width: 900px;
-    min-height: 100%;
-    min-width: 360px;
-    margin: 0 auto;
-    box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
-    user-select: none;
+	background-color: #333333;
+	color: #EDEDED;
+	font-family: Roboto, Verdana, Arial, Sans-Serif;
+	font-size: 16px;
+	padding: 0px;
+	cursor: default;
+	width: 100%;
+	max-width: 900px;
+	min-height: 100%;
+	min-width: 360px;
+	margin: 0 auto;
+	box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+	user-select: none;
 }
 
 a, a:visited {
-    color: #127940;
+	color: #127940;
 }
 
 a:hover {
-    color: #23AD61;
+	color: #23AD61;
 }
 
 header {
-    display: block;
-    height: 56px;
-    background-color: #127940;
-    color: #EDEDED;
-    overflow: hidden;
-    white-space: nowrap;
-    padding: 0px 8px;
+	display: block;
+	height: 56px;
+	background-color: #127940;
+	color: #EDEDED;
+	overflow: hidden;
+	white-space: nowrap;
+	padding: 0px 8px;
 }
 
 h1 {
-    display: inline-block;
-    max-width: 60%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    padding: 0px 8px;
-    margin: 0px;
-    line-height: 56px;
-    font-size: 18px;
-    font-weight: normal;
+	display: inline-block;
+	max-width: 60%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding: 0px 8px;
+	margin: 0px;
+	line-height: 56px;
+	font-size: 18px;
+	font-weight: normal;
 }
 
 main {
-    text-align: center;
-    padding: 8px;
-    padding-bottom: 64px;
+	text-align: center;
+	padding: 8px;
+	padding-bottom: 64px;
 }
 
 .source {
-    padding: 16px 0px;
-    border-bottom: solid 1px #555555;
+	padding: 16px 0px;
+	border-bottom: solid 1px #555555;
 }
 
 .source:last-child {
-    border-bottom: none;
+	border-bottom: none;
 }
 
 h2 {
-    margin: 0px 8px 8px 8px;
+	margin: 0px 8px 8px 8px;
 }
 
 .next-broadcast
 {
-    margin: 0px 8px 18px 8px;
-    font-size: 12px;
+	margin: 0px 8px 18px 8px;
+	font-size: 12px;
 }
 
 .ep, .ep:visited, .live, .live:visited {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-    width: 156px;
-    padding: 8px 8px 24px 8px;
-    background: rgba(255,255,255,0);
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	text-decoration: none;
+	color: inherit;
+	width: 156px;
+	padding: 8px 8px 24px 8px;
+	background: rgba(255,255,255,0);
 }
 
 .ep:hover, .ep:focus, .live:hover, .live:focus {
-    background: rgba(255,255,255,.1) !important;
-    color: #23AD61;
-    text-decoration: none;
-    outline: 0;
+	background: rgba(255,255,255,.1) !important;
+	color: #23AD61;
+	text-decoration: none;
+	outline: 0;
 }
 
 .ep.hidden {
-    display: none;
+	display: none;
 }
 
 .show-more {
-    display: block;
-    width: 90%;
-    padding: 12px 8px;
-    margin: 16px auto 4px auto;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    color: #EDEDED;
-    background: rgba(255,255,255,.1);
-    outline: 0;
+	display: block;
+	width: 90%;
+	padding: 12px 8px;
+	margin: 16px auto 4px auto;
+	cursor: pointer;
+	border: none;
+	border-radius: 5px;
+	color: #EDEDED;
+	background: rgba(255,255,255,.1);
+	outline: 0;
 }
 
 .show-more:hover, .show-more:focus {
-    background: rgba(255,255,255,.2);
+	background: rgba(255,255,255,.2);
 }
 
 .live.anim {
-    animation: attentionlivefull 3s 8;
+	animation: attentionlivefull 3s 8;
 }
 
 @keyframes attentionlivefull {
-    0% { background-color: rgba(255,255,255,0) }
-    50% { background-color: rgba(255,255,255,0.2) }
-    100% { background-color: rgba(255,255,255,0) }
+	0% { background-color: rgba(255,255,255,0) }
+	50% { background-color: rgba(255,255,255,0.2) }
+	100% { background-color: rgba(255,255,255,0) }
 }
 
 .ep img, .live img {
-    display: block;
-    width: 156px;
-    height: 156px;
-    object-fit: cover;
-    margin-bottom: 4px;
-    pointer-events: none;
+	display: block;
+	width: 156px;
+	height: 156px;
+	object-fit: cover;
+	margin-bottom: 4px;
+	pointer-events: none;
 }
 
 .live:before {
-    box-shadow: 0 -4px 8px rgba(0,0,0,.28), 0 0 4px rgba(0,0,0,.4);
-    content: "LIVE";
-    padding: 2px 4px;
-    color: #FFFFFF;
-    background: #D81515;
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    font-size: 10px;
-    font-weight: bold;
-    border-radius: 3px;
-    opacity: 1;
+	box-shadow: 0 -4px 8px rgba(0,0,0,.28), 0 0 4px rgba(0,0,0,.4);
+	content: "LIVE";
+	padding: 2px 4px;
+	color: #FFFFFF;
+	background: #D81515;
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	font-size: 10px;
+	font-weight: bold;
+	border-radius: 3px;
+	opacity: 1;
 }
 
 .live.anim:before {
-    animation: attentionlive 3s 8;
+	animation: attentionlive 3s 8;
 }
 
 @keyframes attentionlive {
-    0% { opacity: 1 }
-    50% { opacity: 0.5 }
-    100% { opacity: 1 }
+	0% { opacity: 1 }
+	50% { opacity: 0.5 }
+	100% { opacity: 1 }
 }
 
 footer {
-    display: block;
-    z-index: 100;
-    position: fixed;
-    bottom: -90px;
-    width: 100%;
-    max-width: 900px;
-    margin: 0px;
-    padding: 0px;
-    white-space: nowrap;
-    will-change: bottom;
-    transition: bottom 0.3s;
-    transition-timing-function: ease-in-out;
+	display: block;
+	z-index: 100;
+	position: fixed;
+	bottom: -90px;
+	width: 100%;
+	max-width: 900px;
+	margin: 0px;
+	padding: 0px;
+	white-space: nowrap;
+	will-change: bottom;
+	transition: bottom 0.3s;
+	transition-timing-function: ease-in-out;
 }
 
 #playerwrapper {
-    background-color: #212121;
-    box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+	background-color: #212121;
+	box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
 }
 
 #playerwrapper:before {
-    box-shadow: 0 -4px 8px rgba(0,0,0,.28), 0 0 4px rgba(0,0,0,.14);
-    content: "";
-    height: 75px;
-    left: 0px;
-    bottom: 0px;
-    position: absolute;
-    width: 100%;
-    pointer-events: none;
+	box-shadow: 0 -4px 8px rgba(0,0,0,.28), 0 0 4px rgba(0,0,0,.14);
+	content: "";
+	height: 75px;
+	left: 0px;
+	bottom: 0px;
+	position: absolute;
+	width: 100%;
+	pointer-events: none;
 }
 
 #seekbarwrapper {
-    display: block;
-    position: absolute;
-    top: -18px;
-    left: 0px;
-    right: 0px;
-    height: 30px;
-    width: 100%;
-    margin: 0px;
-    z-index: 20;
+	display: block;
+	position: absolute;
+	top: -18px;
+	left: 0px;
+	right: 0px;
+	height: 30px;
+	width: 100%;
+	margin: 0px;
+	z-index: 20;
 }
 
 #player-art {
-    display: inline-block;
-    vertical-align: middle;
-    background-color: #1A1A1A;
-    width: 71px;
-    height: 71px;
-    pointer-events: none;
+	display: inline-block;
+	vertical-align: middle;
+	background-color: #1A1A1A;
+	width: 71px;
+	height: 71px;
+	pointer-events: none;
 }
 
 footer button.player-ctrl {
-    display: inline-block;
-    vertical-align: middle;
-    text-align: center;
-    cursor: pointer;
-    background: rgba(255,255,255,0);
-    opacity: 0.75;
-    border: none;
-    width: 51px;
-    height: 51px;
-    margin: 5px 3px 5px 3px;
-    font-size: 36px;
-    color: #EDEDED;
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+	cursor: pointer;
+	background: rgba(255,255,255,0);
+	opacity: 0.75;
+	border: none;
+	width: 51px;
+	height: 51px;
+	margin: 5px 3px 5px 3px;
+	font-size: 36px;
+	color: #EDEDED;
 }
 
 footer button.player-ctrl:hover, footer button.player-ctrl:focus {
-    opacity: 1;
-    outline: 0;
+	opacity: 1;
+	outline: 0;
 }
 
 #play-pause {
-    width: 61px;
-    height: 61px;
-    font-size: 48px;
+	width: 61px;
+	height: 61px;
+	font-size: 48px;
 }
 
 #metadata {
-    display: inline-block;
-    vertical-align: middle;
-    width: 80%;
-    max-width: 600px;
-    white-space: nowrap;
+	display: inline-block;
+	vertical-align: middle;
+	width: 80%;
+	max-width: 600px;
+	white-space: nowrap;
 }
 
 #metadata div {
-    display: block;
-    text-overflow: ellipsis;
-    overflow: hidden;
+	display: block;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 #player-title {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 #player-show {
-    color: #919191;
-    font-size: 14px;
+	color: #919191;
+	font-size: 14px;
 }
 
 #player-extra {
-    color: #515151;
-    font-size: 10px;
+	color: #515151;
+	font-size: 10px;
 }
 
 #player-times {
-    display: block;
-    position: absolute;
-    right: 4px;
-    top: 4px;
-    color: #515151;
-    font-size: 11px;
+	display: block;
+	position: absolute;
+	right: 4px;
+	top: 4px;
+	color: #515151;
+	font-size: 11px;
 }
 
 ::-moz-selection {
-    color: #FFFFFF;
-    background-color: rgba(18, 121, 64, 0.99);
-    text-shadow: none;
+	color: #FFFFFF;
+	background-color: rgba(18, 121, 64, 0.99);
+	text-shadow: none;
 }
 
 ::selection {
-    color: #FFFFFF;
-    background-color: rgba(18, 121, 64, 0.99);
-    text-shadow: none;
+	color: #FFFFFF;
+	background-color: rgba(18, 121, 64, 0.99);
+	text-shadow: none;
 }
 
 /* seekbar */
 #progressbar-outer {
-    width: 100%;
-    height: 4px;
-    padding: 0px;
-    padding-top: 14px;
-    padding-bottom: 14px;
-    margin: 0px;
-    white-space: nowrap;
-    background-color: rgba(0,0,0,0);
-    position: relative;
-    cursor: default;
-    overflow: hidden;
+	width: 100%;
+	height: 4px;
+	padding: 0px;
+	padding-top: 14px;
+	padding-bottom: 14px;
+	margin: 0px;
+	white-space: nowrap;
+	background-color: rgba(0,0,0,0);
+	position: relative;
+	cursor: default;
+	overflow: hidden;
 }
 
 #progressbar-outer .progressbar-inner {
-    width: 0%;
-    height: inherit;
-    position: absolute;
-    left: 0;
-    transition: 0.25s;
-    transition-timing-function: linear;
+	width: 0%;
+	height: inherit;
+	position: absolute;
+	left: 0;
+	transition: 0.25s;
+	transition-timing-function: linear;
 }
 
 #progressbar-outer #barbackground {
-    width: 100%;
-    background-color: #434343;
-    z-index: 1;
+	width: 100%;
+	background-color: #434343;
+	z-index: 1;
 }
 
 #progressbar-outer #progressbar {
-    background-color: #23AD61;
-    transition: background-color 1s;
-    z-index: 3;
+	background-color: #23AD61;
+	transition: background-color 1s;
+	z-index: 3;
 }
 
 #progressbar-outer #bufferbar {
-    background-color: rgba(255,255,255,0.2);
-    z-index: 2;
-    transition-timing-function: ease;
+	background-color: rgba(255,255,255,0.2);
+	z-index: 2;
+	transition-timing-function: ease;
 }
 
 #progressbar.hovering:after {
-    content: '';
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 5px;
-    background-color: #23AD61;
-    transition: background-color 1s;
-    
-    position: absolute;
-    right: -5px;
-    top: -3px;
-    
-    animation: progresshover 0.1s 1 alternate ease-in-out;
-    animation-fill-mode: forwards;
+	content: '';
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	background-color: #23AD61;
+	transition: background-color 1s;
+	
+	position: absolute;
+	right: -5px;
+	top: -3px;
+	
+	animation: progresshover 0.1s 1 alternate ease-in-out;
+	animation-fill-mode: forwards;
 }
 
 @keyframes progresshover {
-    from {
-        
-    }
-    to {
-        width: 16px;
-        height: 16px;
-        border-radius: 8px;
-        right: -6px;
-        top: -6px;
-    }
+	from {
+		
+	}
+	to {
+		width: 16px;
+		height: 16px;
+		border-radius: 8px;
+		right: -6px;
+		top: -6px;
+	}
 }
 
 @media screen and (max-width: 600px)
 {
-    .ep, .ep:visited, .live, .live:visited {
-        width: 153px;
-    }
+	.ep, .ep:visited, .live, .live:visited {
+		width: 153px;
+	}
 
-    .ep img, .live img {
-        width: 153px;
-        height: 153px;
-    }
+	.ep img, .live img {
+		width: 153px;
+		height: 153px;
+	}
 }
 
 @media screen and (max-width: 450px)
 {
-    #skip-next {
-        display: none;
-    }
+	#skip-next {
+		display: none;
+	}
 
-    #play-pause {
-        margin: 0px;
-        width: 51px;
-        height: 71px;
-        font-size: 36px;
-    }
+	#play-pause {
+		margin: 0px;
+		width: 51px;
+		height: 71px;
+		font-size: 36px;
+	}
 
-    #player-times {
-        font-size: 10px;
-    }
+	#player-times {
+		font-size: 10px;
+	}
 }
