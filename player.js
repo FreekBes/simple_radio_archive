@@ -39,7 +39,7 @@ var aPlayer = {
 		// create filters
 		this.filter = this.audioContext.createBiquadFilter();
 		this.filter.type = "lowpass";
-		this.filter.frequency.value = 48;
+		this.filter.frequency.value = 32;
 		this.gainNode = this.audioContext.createGain();
 		this.gainNode.gain.value = 1;
 
@@ -101,6 +101,10 @@ var aPlayer = {
 
 		this.canvas.setAttribute("width", window.innerWidth);
 		this.canvas.setAttribute("height", window.innerHeight);
+		window.addEventListener("resize", function(event) {
+			aPlayer.canvas.setAttribute("width", window.innerWidth);
+			aPlayer.canvas.setAttribute("height", window.innerHeight);
+		});
 		this.canvasContext = this.canvas.getContext("2d");
 		this.drawVisuals = requestAnimationFrame(this.draw);
 	},
@@ -114,7 +118,7 @@ var aPlayer = {
 
 		aPlayer.canvasContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
 		for (var i = 0; i < aPlayer.bufferLength; i++) {
-			barHeight = aPlayer.dataArray[i] * Math.floor(window.innerWidth / 255);
+			barHeight = aPlayer.dataArray[i] * Math.floor(window.innerHeight / 142);
 			aPlayer.canvasContext.fillStyle = 'rgb(18, ' + (aPlayer.dataArray[i] + 64) + ',64)';
 			aPlayer.canvasContext.fillRect(x, window.innerHeight - barHeight / 2, barWidth, barHeight);
 			aPlayer.canvasContext.fillRect(window.innerWidth - x - barWidth, window.innerHeight - barHeight / 2, barWidth, barHeight);
