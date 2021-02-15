@@ -30,7 +30,7 @@ var aPlayer = {
 		this.audio = new Audio();
 		this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
 		this.analyser = this.audioContext.createAnalyser();
-		this.analyser.fftsize = 256;
+		this.analyser.fftsize = 2048;
 		this.analyser.smoothingTimeConstant = 0.8;
 		this.bufferLength = this.analyser.frequencyBinCount;
 		this.dataArray = new Uint8Array(this.bufferLength);
@@ -39,7 +39,7 @@ var aPlayer = {
 		// create filters
 		this.filter = this.audioContext.createBiquadFilter();
 		this.filter.type = "lowpass";
-		this.filter.frequency.value = 20;
+		this.filter.frequency.value = 48;
 		this.gainNode = this.audioContext.createGain();
 		this.gainNode.gain.value = 1;
 
@@ -115,8 +115,9 @@ var aPlayer = {
 		aPlayer.canvasContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
 		for (var i = 0; i < aPlayer.bufferLength; i++) {
 			barHeight = aPlayer.dataArray[i] * Math.floor(window.innerWidth / 255);
-			aPlayer.canvasContext.fillStyle = 'rgb(' + (aPlayer.dataArray[i] + 100) + ',50,50)';
+			aPlayer.canvasContext.fillStyle = 'rgb(18, ' + (aPlayer.dataArray[i] + 64) + ',64)';
 			aPlayer.canvasContext.fillRect(x, window.innerHeight - barHeight / 2, barWidth, barHeight);
+			aPlayer.canvasContext.fillRect(window.innerWidth - x - barWidth, window.innerHeight - barHeight / 2, barWidth, barHeight);
 
 			x += barWidth + 1;
 		}
