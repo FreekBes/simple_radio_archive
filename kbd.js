@@ -87,6 +87,9 @@ window.addEventListener("keydown", function(e) {
 			case 96:	// [0]
 				aPlayer.setVolume(1.0);
 				break;
+			case 66:	// [B]
+				searchBLEDom();
+				break;
 			case 116:	// [F5]
 				window.location.reload();
 				break;

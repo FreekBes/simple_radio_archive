@@ -106,6 +106,8 @@ var aPlayer = {
 			aPlayer.canvas.setAttribute("height", window.innerHeight);
 		});
 		this.canvasContext = this.canvas.getContext("2d");
+		this.fpsInterval = 1000 / 15;
+		this.lastFrameTime = Date.now();
 		this.drawVisuals = requestAnimationFrame(this.draw);
 	},
 
@@ -126,6 +128,24 @@ var aPlayer = {
 			x += barWidth + 1;
 		}
 
+		var now = Date.now();
+		var elapsed = now - aPlayer.lastFrameTime;
+
+		if (elapsed > aPlayer.fpsInterval) {
+			aPlayer.lastFrameTime = now - (elapsed % aPlayer.fpsInterval);
+			// var bPerc = 1.8 * Math.ceil(aPlayer.dataArray[2] / 255 * 100) - 80;
+			var bPerc = 3.5 * Math.ceil(aPlayer.dataArray[2] / 255 * 100) - 250;
+			//console.log(aPlayer.dataArray[2] + " wordt " + Math.ceil(aPlayer.dataArray[2] / 255 * 100) + " wordt " + bPerc);
+			if (char != null) {
+				if (aPlayer.dataArray[2] > 0) {
+					//console.log(Math.ceil((255 / aPlayer.dataArray[2]) * 100));
+					setBrightness(bPerc);
+				}
+				else {
+					setBrightness(0);
+				}
+			}
+		}
 		requestAnimationFrame(aPlayer.draw);
 	},
 

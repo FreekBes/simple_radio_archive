@@ -79,6 +79,7 @@
 	<meta name="apple-mobile-web-app-title" content="<?php echo $settings["title"]; ?>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 	<script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script type="application/javascript" src="useful.js?v=<?php echo $v; ?>"></script>
 </head>
 <body>
 	<canvas id="background"></canvas>
@@ -215,6 +216,7 @@
 		</footer>
 	</div>
 	<script type="application/javascript" src="progressbar.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="bt.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="player.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="kbd.js?v=<?php echo $v; ?>"></script>
 </body>
