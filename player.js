@@ -17,14 +17,52 @@ var aPlayer = {
 	isLive: false,
 	schedule: [0, 0],
 	startedPlayingAt: 0,
+	beat: {
+		historyBuffer: [],
+		instantEnergy: 0,
+		prevTime: 0,
+		bpmTable: [],
+		bpm: {
+			time: 0,
+			counter: 0
+		},
+		sens: 5
+	},
 
 	init: function()
 	{
 		this.initialized = true;
 		this.list = document.getElementsByClassName("ep");
 		this.epamount = this.list.length;
-		this.audio = new Audio();
 		this.times = document.getElementById("player-times");
+		this.canvas = document.getElementById("background");
+
+		// create audio and context
+		this.audio = new Audio();
+		this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+		this.analyser = this.audioContext.createAnalyser();
+		this.analyser.fftsize = 256;
+		this.beat.MAX_COLLECT_SIZE = 43 * (this.analyser.fftsize / 2);
+		this.beat.COLLECT_SIZE = 1;
+		this.analyser.smoothingTimeConstant = 0;
+		this.bufferLength = this.analyser.frequencyBinCount;
+		this.dataArray = new Uint8Array(this.bufferLength);
+		this.source = this.audioContext.createMediaElementSource(this.audio);
+
+		// create filters
+		this.filter = this.audioContext.createBiquadFilter();
+		this.filter.type = "lowpass";
+		this.filter.frequency.value = 20;
+		this.gainNode = this.audioContext.createGain();
+		this.gainNode.gain.value = 1;
+
+
+		// connect all Web Audio API elements together
+		this.source.connect(this.filter);
+		this.filter.connect(this.gainNode);
+		this.gainNode.connect(this.analyser);
+		this.source.connect(this.audioContext.destination);
+		//this.gainNode.connect(this.audioContext.destination);
 
 		if ('mediaSession' in navigator)
 		{
@@ -73,6 +111,111 @@ var aPlayer = {
 			console.log("Episode ended, skipping to next...");
 			aPlayer.next();
 		});
+
+		this.canvas.setAttribute("width", window.innerWidth);
+		this.canvas.setAttribute("height", window.innerHeight);
+		this.canvasContext = this.canvas.getContext("2d");
+		this.drawVisuals = requestAnimationFrame(this.draw);
+	},
+
+	draw: function() {
+		aPlayer.analyser.getByteFrequencyData(aPlayer.dataArray);
+		var localAverageEnergy = 0;
+		var instantCounter = 0;
+		var isBeat = false;
+
+		// fill history buffer
+		for (var i = 0; i < aPlayer.bufferLength; i++, ++instantCounter) {
+			aPlayer.beat.historyBuffer.push(aPlayer.dataArray[i]);
+			aPlayer.beat.instantEnergy += aPlayer.dataArray[i];
+		}
+
+		if (instantCounter > aPlayer.beat.COLLECT_SIZE - 1 && aPlayer.beat.historyBuffer.length > aPlayer.beat.MAX_COLLECT_SIZE - 1) {
+			aPlayer.beat.instantEnergy = aPlayer.beat.instantEnergy / (aPlayer.beat.COLLECT_SIZE * (aPlayer.analyser.fftsize / 2));
+
+			var average = 0;
+			for (var i = 0; i < aPlayer.beat.historyBuffer.length - 1; i++) {
+				average += aPlayer.beat.historyBuffer[i];
+			}
+			localAverageEnergy = average / aPlayer.beat.historyBuffer.length;
+			
+			var timeDiff = aPlayer.audio.currentTime - aPlayer.beat.prevTime;
+
+			if (timeDiff > 2 && aPlayer.beat.bpmTable.length > 0) {
+				for (var j = 0; j < aPlayer.beat.bpmTable.length - 1; j++) {
+					var timeDiffInteger = Math.round( (timeDiff / aPlayer.beat.bpmTable[j]['time']) * 1000);
+					if (timeDiffInteger % (Math.round(aPlayer.beat.bpmTable[j]['time']) * 1000) == 0) {
+						timeDiff = new Number(aPlayer.beat.bpmTable[j]['time']);
+					}
+				}
+			}
+			
+			if (timeDiff > 3) {
+				aPlayer.beat.prevTime = timeDiff = 0;
+			}
+
+			if (
+				aPlayer.audio.currentTime > 0.29 && aPlayer.beat.instantEnergy > localAverageEnergy &&
+				(aPlayer.beat.instantEnergy > (aPlayer.beat.sens * localAverageEnergy)) &&
+				((timeDiff < 2.0 && timeDiff > 0.29) || aPlayer.beat.prevTime == 0)
+			) {
+				isBeat = true;
+				aPlayer.beat.prevTime = aPlayer.audio.currentTime;
+				aPlayer.beat.bpm = {
+					time: timeDiff.toFixed(3),
+					counter: 1
+				}
+				for (var j = 0; j < aPlayer.beat.bpmTable.length; j++) {
+					if (aPlayer.beat.bpmTable[j]['time'] == aPlayer.beat.bpm['time']) {
+						aPlayer.beat.bpmTable[j]['counter']++;
+						aPlayer.beat.bpm = 0;
+						if (aPlayer.beat.bpmTable[j]['counter'] > 3 && j < 2) {
+							//console.log("Beat match");
+						}
+
+						break;
+					}
+				}
+
+				if (aPlayer.beat.bpm != 0 || aPlayer.beat.bpmTable.length == 0) {
+					aPlayer.beat.bpmTable.push(aPlayer.beat.bpm);
+				}
+				aPlayer.beat.bpmTable.sort(function(a, b) {
+					return b['counter'] - a['counter'];
+				});
+			}
+
+			var temp = aPlayer.beat.historyBuffer.slice(0);
+			aPlayer.beat.historyBuffer = [];
+			aPlayer.beat.historyBuffer = temp.slice(aPlayer.beat.COLLECT_SIZE * (aPlayer.analyser.fftsize / 2), temp.length);
+
+			instantCounter = 0;
+			aPlayer.beat.instantEnergy = 0;
+			localAverageEnergy = 0;
+		}
+
+		var barWidth = (window.innerWidth / aPlayer.bufferLength) * 2.5;
+		var barHeight;
+		var x = 0;
+
+		aPlayer.canvasContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		/*
+		for (var i = 0; i < aPlayer.bufferLength; i++) {
+			barHeight = aPlayer.dataArray[i] * Math.floor(window.innerWidth / 255);
+			aPlayer.canvasContext.fillStyle = 'rgb(' + (aPlayer.dataArray[i] + 100) + ',50,50)';
+			aPlayer.canvasContext.fillRect(x, window.innerHeight - barHeight / 2, barWidth, barHeight);
+
+			x += barWidth + 1;
+		}
+		*/
+
+		if (isBeat) {
+			console.log(isBeat);
+			aPlayer.canvasContext.fillStyle = 'rgb(255,255,255)';
+			aPlayer.canvasContext.fillRect(0, 0, window.innerWidth, window.innerHeight);
+		}
+
+		requestAnimationFrame(aPlayer.draw);
 	},
 
 	open: function(num)

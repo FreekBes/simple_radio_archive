@@ -1,5 +1,5 @@
 <?php
-	$v = "2.3";
+	$v = "2.4";
 
 	function get_filename_struct_part($filename, $filename_struct, $struct_part)
 	{
@@ -81,136 +81,139 @@
 	<script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-	<header>
-		<h1><?php echo $settings["title"]; ?></h1>
-	</header>
-	<main>
-		<?php foreach($settings["sources"] as $source) { ?>
-		<div class="source">
-			<h2 name="<?php echo(strtolower($source["metadata"]["short_name"])); ?>" id="<?php echo(strtolower($source["metadata"]["short_name"])); ?>"><?php echo($source["metadata"]["name"]); ?></h2>
-			<?php if (count($source["metadata"]["source"]["schedule"]) > 0) { ?>
-				<?php $schedule = get_next_broadcast_times($source["metadata"]["source"]["schedule"]); ?>
-				<p class="next-broadcast">The <b>next broadcast</b> will be on <b><?php echo date("l", $schedule[0]); ?> the <?php echo date("jS", $schedule[0]); ?>, at <?php echo date("g:i A", $schedule[0]); ?></b>. You will be able to listen to the broadcast live, right here!</p>
-			<?php
-			}
-			if (empty($source["eps"]))
-			{
-				add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], 1, $source["metadata"]["default_img"], false);
-				echo '<p class="no-eps">No episodes have been uploaded as of yet.</p>';
-			}
-			else
-			{
-				$firstAdded = false;
-				$c = 0;
-				foreach($source["eps"] as $audio)
-				{
-					$c++;
-					$ext = pathinfo($audio, PATHINFO_EXTENSION);
-					$ep_num = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "e");
-					$year = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "y");
-					$month = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "m");
-					$day = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "d");
-					$ep_name = "Episode " . intval($ep_num);
-					$date = $year . "-" . $month . "-" . $day;
-					$coverart = $source["metadata"]["default_img"];
-					if (file_exists(str_replace(".".$ext, ".jpg", $audio)))
-					{
-						$coverart = str_replace(".".$ext, ".jpg", $audio);
-					}
-					else if (file_exists($source["files"]["folder"]."/".$source["metadata"]["short_name"]."_".$source["metadata"]["language"]."_E".$ep_num.".jpg"))
-					{
-						$coverart = $source["files"]["folder"]."/".$source["metadata"]["short_name"]."_".$source["metadata"]["language"]."_E".$ep_num.".jpg";
-					}
-					$coverart_dimens = getimagesize($coverart);
-					$coverart_dimens = $coverart_dimens[0] . "x" . $coverart_dimens[1];
-					if (!$firstAdded && count($source["metadata"]["source"]["schedule"]) > 0)
-					{
-						$firstAdded = true;
-						if (time() >= $schedule[0] && time() < $schedule[1] && $source["metadata"]["source"]["streamripper_fix_enabled"])
-						{
-							add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], $ep_num, $source["metadata"]["default_img"], true);
-							continue;
-						}
-						else {
-							add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], $ep_num+1, $source["metadata"]["default_img"], false);
-						}
-					}
-					if ($c == 11)
-					{
-						add_show_more_button($source["metadata"]["short_name"]);
-					}
-					?>
-					<a class="ep<?php echo ($c > 10 ? " hidden" : ""); ?>" href="<?php echo $audio; ?>" data-show="<?php echo $source["metadata"]["name"]; ?>" data-epnum="<?php echo $ep_num; ?>" data-epname="<?php echo $ep_name; ?>" data-art="<?php echo $coverart; ?>" data-artsize="<?php echo $coverart_dimens; ?>" data-date="<?php echo $date; ?>" onclick="event.preventDefault(); aPlayer.open(<?php echo($eNum++); ?>); this.blur(); return false;"><img loading="lazy" src="<?php echo $coverart; ?>" /><b><?php echo $ep_name; ?></b><br><small><?php echo $date; ?></small></a>
-					<?php
+	<canvas id="background"></canvas>
+	<div id="contents">
+		<header>
+			<h1><?php echo $settings["title"]; ?></h1>
+		</header>
+		<main>
+			<?php foreach($settings["sources"] as $source) { ?>
+			<div class="source">
+				<h2 name="<?php echo(strtolower($source["metadata"]["short_name"])); ?>" id="<?php echo(strtolower($source["metadata"]["short_name"])); ?>"><?php echo($source["metadata"]["name"]); ?></h2>
+				<?php if (count($source["metadata"]["source"]["schedule"]) > 0) { ?>
+					<?php $schedule = get_next_broadcast_times($source["metadata"]["source"]["schedule"]); ?>
+					<p class="next-broadcast">The <b>next broadcast</b> will be on <b><?php echo date("l", $schedule[0]); ?> the <?php echo date("jS", $schedule[0]); ?>, at <?php echo date("g:i A", $schedule[0]); ?></b>. You will be able to listen to the broadcast live, right here!</p>
+				<?php
 				}
-			} ?>
-		</div>
-		<?php } ?>
-		<script>
-		setInterval(function()
-		{
-			var livestreams = document.getElementsByClassName("live");
-			var curTimestamp = Math.floor(new Date().getTime() / 1000);
-			for (c = 0; c < livestreams.length; c++)
-			{
-				var schedule = livestreams[c].getAttribute("data-schedule").split("/");
-				if (curTimestamp >= schedule[0] && curTimestamp <= schedule[1])
+				if (empty($source["eps"]))
 				{
-					livestreams[c].style.display = "inline-block";
-					livestreams[c].className = "live anim";
+					add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], 1, $source["metadata"]["default_img"], false);
+					echo '<p class="no-eps">No episodes have been uploaded as of yet.</p>';
 				}
 				else
 				{
-					livestreams[c].style.display = "none";
-					livestreams[c].className = "live";
+					$firstAdded = false;
+					$c = 0;
+					foreach($source["eps"] as $audio)
+					{
+						$c++;
+						$ext = pathinfo($audio, PATHINFO_EXTENSION);
+						$ep_num = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "e");
+						$year = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "y");
+						$month = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "m");
+						$day = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "d");
+						$ep_name = "Episode " . intval($ep_num);
+						$date = $year . "-" . $month . "-" . $day;
+						$coverart = $source["metadata"]["default_img"];
+						if (file_exists(str_replace(".".$ext, ".jpg", $audio)))
+						{
+							$coverart = str_replace(".".$ext, ".jpg", $audio);
+						}
+						else if (file_exists($source["files"]["folder"]."/".$source["metadata"]["short_name"]."_".$source["metadata"]["language"]."_E".$ep_num.".jpg"))
+						{
+							$coverart = $source["files"]["folder"]."/".$source["metadata"]["short_name"]."_".$source["metadata"]["language"]."_E".$ep_num.".jpg";
+						}
+						$coverart_dimens = getimagesize($coverart);
+						$coverart_dimens = $coverart_dimens[0] . "x" . $coverart_dimens[1];
+						if (!$firstAdded && count($source["metadata"]["source"]["schedule"]) > 0)
+						{
+							$firstAdded = true;
+							if (time() >= $schedule[0] && time() < $schedule[1] && $source["metadata"]["source"]["streamripper_fix_enabled"])
+							{
+								add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], $ep_num, $source["metadata"]["default_img"], true);
+								continue;
+							}
+							else {
+								add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], $ep_num+1, $source["metadata"]["default_img"], false);
+							}
+						}
+						if ($c == 11)
+						{
+							add_show_more_button($source["metadata"]["short_name"]);
+						}
+						?>
+						<a class="ep<?php echo ($c > 10 ? " hidden" : ""); ?>" href="<?php echo $audio; ?>" data-show="<?php echo $source["metadata"]["name"]; ?>" data-epnum="<?php echo $ep_num; ?>" data-epname="<?php echo $ep_name; ?>" data-art="<?php echo $coverart; ?>" data-artsize="<?php echo $coverart_dimens; ?>" data-date="<?php echo $date; ?>" onclick="event.preventDefault(); aPlayer.open(<?php echo($eNum++); ?>); this.blur(); return false;"><img loading="lazy" src="<?php echo $coverart; ?>" /><b><?php echo $ep_name; ?></b><br><small><?php echo $date; ?></small></a>
+						<?php
+					}
+				} ?>
+			</div>
+			<?php } ?>
+			<script>
+			setInterval(function()
+			{
+				var livestreams = document.getElementsByClassName("live");
+				var curTimestamp = Math.floor(new Date().getTime() / 1000);
+				for (c = 0; c < livestreams.length; c++)
+				{
+					var schedule = livestreams[c].getAttribute("data-schedule").split("/");
+					if (curTimestamp >= schedule[0] && curTimestamp <= schedule[1])
+					{
+						livestreams[c].style.display = "inline-block";
+						livestreams[c].className = "live anim";
+					}
+					else
+					{
+						livestreams[c].style.display = "none";
+						livestreams[c].className = "live";
+					}
+				}
+			}, 1000);
+			
+			function expandShow(elem)
+			{
+				elem.blur();
+				var hiddenEps = elem.parentNode.getElementsByClassName("hidden");
+				var hiddenCount = hiddenEps.length;
+				var lastUnhidden = null;
+				// use hiddenEps[0] since hiddenEps[i] will skip over episodes since the amount of episodes in hiddenEps
+				// will decrease with every loop
+				for (var i = 0; i < hiddenCount && i < 30; i++)
+				{
+					lastUnhidden = hiddenEps[0];
+					hiddenEps[0].className = "ep";
+				}
+				if (hiddenEps.length == 0 || lastUnhidden == null)
+				{
+					elem.style.display = "none";
+				}
+				else if (lastUnhidden != null)
+				{
+					elem.parentNode.insertBefore(elem, lastUnhidden.nextSibling);
 				}
 			}
-		}, 1000);
-		
-		function expandShow(elem)
-		{
-			elem.blur();
-			var hiddenEps = elem.parentNode.getElementsByClassName("hidden");
-			var hiddenCount = hiddenEps.length;
-			var lastUnhidden = null;
-			// use hiddenEps[0] since hiddenEps[i] will skip over episodes since the amount of episodes in hiddenEps
-			// will decrease with every loop
-			for (var i = 0; i < hiddenCount && i < 30; i++)
-			{
-				lastUnhidden = hiddenEps[0];
-				hiddenEps[0].className = "ep";
-			}
-			if (hiddenEps.length == 0 || lastUnhidden == null)
-			{
-				elem.style.display = "none";
-			}
-			else if (lastUnhidden != null)
-			{
-				elem.parentNode.insertBefore(elem, lastUnhidden.nextSibling);
-			}
-		}
-		</script>
-	</main>
-	<footer>
-		<div id="seekbarwrapper">
-			<div id="progressbar-outer">
-				<div class="progressbar-inner" id="barbackground"></div>
-				<div class="progressbar-inner" id="bufferbar"></div>
-				<div class="progressbar-inner" id="progressbar"></div>
+			</script>
+		</main>
+		<footer>
+			<div id="seekbarwrapper">
+				<div id="progressbar-outer">
+					<div class="progressbar-inner" id="barbackground"></div>
+					<div class="progressbar-inner" id="bufferbar"></div>
+					<div class="progressbar-inner" id="progressbar"></div>
+				</div>
 			</div>
-		</div>
-		<div id="playerwrapper">
-			<img id="player-art" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
-			<button class="player-ctrl material-icons" id="play-pause" onclick="aPlayer.togglePlayPause(); this.blur();">play_circle_outline</button>
-			<button class="player-ctrl material-icons" id="skip-next" onclick="aPlayer.next(); this.blur();">skip_next</button>
-			<div id="metadata">
-				<div id="player-title"></div>
-				<div id="player-show"></div>
-				<div id="player-extra"></div>
+			<div id="playerwrapper">
+				<img id="player-art" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+				<button class="player-ctrl material-icons" id="play-pause" onclick="aPlayer.togglePlayPause(); this.blur();">play_circle_outline</button>
+				<button class="player-ctrl material-icons" id="skip-next" onclick="aPlayer.next(); this.blur();">skip_next</button>
+				<div id="metadata">
+					<div id="player-title"></div>
+					<div id="player-show"></div>
+					<div id="player-extra"></div>
+				</div>
+				<div id="player-times"></div>
 			</div>
-			<div id="player-times"></div>
-		</div>
-	</footer>
+		</footer>
+	</div>
 	<script type="application/javascript" src="progressbar.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="player.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="kbd.js?v=<?php echo $v; ?>"></script>
