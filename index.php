@@ -150,17 +150,28 @@
 			</div>
 			<?php } ?>
 			<script>
-			setInterval(function()
+			function checkLiveEps()
 			{
 				var livestreams = document.getElementsByClassName("live");
 				var curTimestamp = Math.floor(new Date().getTime() / 1000);
+				var notHiddenEps = null;
+
 				for (c = 0; c < livestreams.length; c++)
 				{
 					var schedule = livestreams[c].getAttribute("data-schedule").split("/");
 					if (curTimestamp >= schedule[0] && curTimestamp <= schedule[1])
 					{
-						livestreams[c].style.display = "inline-block";
-						livestreams[c].className = "live anim";
+						if (livestreams[c].className.indexOf("anim") == -1)
+						{
+							livestreams[c].style.display = "inline-block";
+							livestreams[c].className = "live anim";
+							notHiddenEps = livestreams[c].parentNode.querySelectorAll(".ep:not(.hidden)");
+							if (notHiddenEps.length > 0)
+							{
+								notHiddenEps[notHiddenEps.length - 1].className = "ep hidden";
+							}
+						}
+						
 					}
 					else
 					{
@@ -168,14 +179,18 @@
 						livestreams[c].className = "live";
 					}
 				}
-			}, 1000);
+			}
+			
+			checkLiveEps();
+			setInterval(checkLiveEps, 1000);
 			
 			function expandShow(elem)
 			{
-				elem.blur();
 				var hiddenEps = elem.parentNode.getElementsByClassName("hidden");
 				var hiddenCount = hiddenEps.length;
 				var lastUnhidden = null;
+				
+				elem.blur();
 				// use hiddenEps[0] since hiddenEps[i] will skip over episodes since the amount of episodes in hiddenEps
 				// will decrease with every loop
 				for (var i = 0; i < hiddenCount && i < 30; i++)
