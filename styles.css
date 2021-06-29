@@ -329,6 +329,7 @@ footer button.player-ctrl:hover, footer button.player-ctrl:focus {
 	left: 0;
 	transition: 0.25s;
 	transition-timing-function: linear;
+	will-change: width;
 }
 
 #progressbar-outer #barbackground {
