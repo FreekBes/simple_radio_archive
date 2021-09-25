@@ -1,5 +1,5 @@
 <?php
-	$v = "2.4";
+	$v = "2.5";
 
 	function get_filename_struct_part($filename, $filename_struct, $struct_part)
 	{
@@ -46,7 +46,7 @@
 			$ep_name = "Episode " . intval($ep_num);
 			$coverart_dimens = getimagesize($coverart);
 			$coverart_dimens = $coverart_dimens[0] . "x" . $coverart_dimens[1];
-			echo '<a '.($is_live ? '' : 'style="display: none;" ').'class="live" href="'.$stream_url.'" data-schedule="'.implode('/', $times).'" data-schedule-readable="'.date("Y-m-d H:i:s", $times[0]).'/'.date("Y-m-d H:i:s", $times[1]).'" data-radio="'.$station.'" data-show="'.$showname.'" data-epnum="'.$ep_num.'" data-epname="'.$ep_name.'" data-art="'.$coverart.'" data-artsize="'.$coverart_dimens.'" data-date="'.$date.'" onclick="event.preventDefault(); aPlayer.openLive(this); this.blur(); return false;"><img loading="lazy" src="'.$coverart.'" /><b>'.$ep_name.'</b><br><small><i>Live right now!</i></small></a>';
+			echo '<a '.($is_live ? '' : 'style="display: none;" ').'class="live" href="'.$stream_url.'" data-schedule="'.implode('/', $times).'" data-schedule-readable="'.date("Y-m-d H:i:s", $times[0]).'/'.date("Y-m-d H:i:s", $times[1]).'" data-radio="'.$station.'" data-show="'.$showname.'" data-epnum="'.$ep_num.'" data-epname="'.$ep_name.'" data-art="'.$coverart.'" data-artsize="'.$coverart_dimens.'" data-date="'.$date.'" data-tracklist="null" onclick="event.preventDefault(); aPlayer.openLive(this); this.blur(); return false;"><img loading="lazy" src="'.$coverart.'" /><b>'.$ep_name.'</b><br><small><i>Live right now!</i></small></a>';
 		}
 	}
 
@@ -88,10 +88,12 @@
 			<h1><?php echo $settings["title"]; ?></h1>
 		</header>
 		<main>
-			<?php foreach($settings["sources"] as $source) { ?>
+			<?php foreach($settings["sources"] as $source)
+{ ?>
 			<div class="source">
 				<h2 name="<?php echo(strtolower($source["metadata"]["short_name"])); ?>" id="<?php echo(strtolower($source["metadata"]["short_name"])); ?>"><?php echo($source["metadata"]["name"]); ?></h2>
-				<?php if (count($source["metadata"]["source"]["schedule"]) > 0) { ?>
+				<?php if (count($source["metadata"]["source"]["schedule"]) > 0)
+{ ?>
 					<?php $schedule = get_next_broadcast_times($source["metadata"]["source"]["schedule"]); ?>
 					<p class="next-broadcast">The <b>next broadcast</b> will be on <b><?php echo date("l", $schedule[0]); ?> the <?php echo date("jS", $schedule[0]); ?>, at <?php echo date("g:i A", $schedule[0]); ?></b>. You will be able to listen to the broadcast live, right here!</p>
 				<?php
@@ -115,6 +117,15 @@
 						$day = get_filename_struct_part(basename($audio), $source["files"]["name_struct"], "d");
 						$ep_name = "Episode " . intval($ep_num);
 						$date = $year . "-" . $month . "-" . $day;
+						$tracklist_json = "null";
+						if (file_exists(str_replace(".".$ext, ".json", $audio)))
+						{
+							$tracklist_json = str_replace(".".$ext, ".json", $audio);
+						}
+						else if (file_exists($source["files"]["folder"]."/".$source["metadata"]["short_name"]."_".$source["metadata"]["language"]."_E".$ep_num.".json"))
+						{
+							$tracklist_json = $source["files"]["folder"]."/".$source["metadata"]["short_name"]."_".$source["metadata"]["language"]."_E".$ep_num.".json";
+						}
 						$coverart = $source["metadata"]["default_img"];
 						if (file_exists(str_replace(".".$ext, ".jpg", $audio)))
 						{
@@ -143,7 +154,7 @@
 							add_show_more_button($source["metadata"]["short_name"]);
 						}
 						?>
-						<a class="ep<?php echo ($c > 10 ? " hidden" : ""); ?>" href="<?php echo $audio; ?>" data-show="<?php echo $source["metadata"]["name"]; ?>" data-epnum="<?php echo $ep_num; ?>" data-epname="<?php echo $ep_name; ?>" data-art="<?php echo $coverart; ?>" data-artsize="<?php echo $coverart_dimens; ?>" data-date="<?php echo $date; ?>" onclick="event.preventDefault(); aPlayer.open(<?php echo($eNum++); ?>); this.blur(); return false;"><img loading="lazy" src="<?php echo $coverart; ?>" /><b><?php echo $ep_name; ?></b><br><small><?php echo $date; ?></small></a>
+						<a class="ep<?php echo ($c > 10 ? " hidden" : ""); ?>" href="<?php echo $audio; ?>" data-show="<?php echo $source["metadata"]["name"]; ?>" data-epnum="<?php echo $ep_num; ?>" data-epname="<?php echo $ep_name; ?>" data-art="<?php echo $coverart; ?>" data-artsize="<?php echo $coverart_dimens; ?>" data-date="<?php echo $date; ?>" data-tracklist="<?php echo $tracklist_json; ?>" onclick="event.preventDefault(); aPlayer.open(<?php echo($eNum++); ?>); this.blur(); return false;"><img loading="lazy" src="<?php echo $coverart; ?>" /><b><?php echo $ep_name; ?></b><br><small><?php echo $date; ?></small></a>
 						<?php
 					}
 				} ?>
@@ -171,7 +182,7 @@
 								notHiddenEps[notHiddenEps.length - 1].className = "ep hidden";
 							}
 						}
-						
+
 					}
 					else
 					{
@@ -180,16 +191,16 @@
 					}
 				}
 			}
-			
+
 			checkLiveEps();
 			setInterval(checkLiveEps, 1000);
-			
+
 			function expandShow(elem)
 			{
 				var hiddenEps = elem.parentNode.getElementsByClassName("hidden");
 				var hiddenCount = hiddenEps.length;
 				var lastUnhidden = null;
-				
+
 				elem.blur();
 				// use hiddenEps[0] since hiddenEps[i] will skip over episodes since the amount of episodes in hiddenEps
 				// will decrease with every loop
@@ -232,6 +243,7 @@
 	</div>
 	<script type="application/javascript" src="progressbar.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="bt.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="tlhandler.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="player.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="kbd.js?v=<?php echo $v; ?>"></script>
 </body>

@@ -5,6 +5,7 @@ if (loc.indexOf('http://') == 0) {
 
 function hexToRgb(hex) {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
 	return result ? {
 		r: parseInt(result[1], 16),
 		g: parseInt(result[2], 16),
@@ -36,6 +37,16 @@ function limitPerc(number) {
 	return number;
 }
 
+function getParameterByName(name, url) {
+	if (!url) url = window.location.href;
+	name = name.replace(/[\[\]]/g, "\\$&");
+	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i"),
+	results = regex.exec(url);
+	if (!results) return null;
+	if (!results[2]) return '';
+	return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
 // from https://stackoverflow.com/questions/7837456/how-to-compare-arrays-in-javascript
 if(Array.prototype.equals)
 	console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
@@ -45,7 +56,7 @@ Array.prototype.equals = function (array) {
 	if (!array)
 		return false;
 
-	// compare lengths - can save a lot of time 
+	// compare lengths - can save a lot of time
 	if (this.length != array.length)
 		return false;
 
@@ -54,13 +65,13 @@ Array.prototype.equals = function (array) {
 		if (this[i] instanceof Array && array[i] instanceof Array) {
 			// recurse into the nested arrays
 			if (!this[i].equals(array[i]))
-				return false;       
-		}           
-		else if (this[i] != array[i]) { 
+				return false;
+		}
+		else if (this[i] != array[i]) {
 			// Warning - two different object instances will never be equal: {x:20} != {x:20}
-			return false;   
-		}           
-	}       
+			return false;
+		}
+	}
 	return true;
 }
 // Hide method from for-in loops

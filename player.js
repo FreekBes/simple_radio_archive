@@ -1,9 +1,12 @@
 function formatSeconds(seconds) {
 	seconds = Number(seconds);
+	if (aPlayer.unformattedSeconds === true) {
+		return Math.floor(seconds);
+	}
 	var h = Math.floor(seconds / 3600);
 	var m = Math.floor(seconds % 3600 / 60);
 	var s = Math.floor(seconds % 60);
-	
+
 	var hDisplay = h > 0 ? h + ":" : "";
 	var mDisplay = m > 0 ? (m < 10 ? "0" : "") + m + ":" : "00:";
 	var sDisplay = s > 0 ? (s < 10 ? "0" : "") + s : "00";
@@ -17,9 +20,9 @@ var aPlayer = {
 	isLive: false,
 	schedule: [0, 0],
 	startedPlayingAt: 0,
+	unformattedSeconds: false,
 
-	init: function()
-	{
+	init: function() {
 		this.initialized = true;
 		this.list = document.getElementsByClassName("ep");
 		this.epamount = this.list.length;
@@ -51,8 +54,7 @@ var aPlayer = {
 		this.source.connect(this.audioContext.destination);
 		//this.gainNode.connect(this.audioContext.destination);
 
-		if ('mediaSession' in navigator)
-		{
+		if ('mediaSession' in navigator) {
 			navigator.mediaSession.metadata = new MediaMetadata({});
 			navigator.mediaSession.setActionHandler('play', this.play);
 			navigator.mediaSession.setActionHandler('pause', this.pause);
@@ -62,34 +64,28 @@ var aPlayer = {
 		}
 
 		setInterval(function() {
-			if (!progressBar.hovering && aPlayer.cur != -1)
-			{
+			if (!progressBar.hovering && aPlayer.cur != -1) {
 				var ct = aPlayer.getCurrentTime();
 				var dur = aPlayer.getDuration();
-				if (dur)
-				{
-					if (dur != Infinity)
-					{
+				if (dur) {
+					if (dur != Infinity) {
 						progressBar.setValue(ct / dur * 100);
 					}
 					aPlayer.updateTimes(ct, dur);
 				}
-				else
-				{
+				else {
 					aPlayer.times.innerHTML = "";
 				}
+				tlHandler.handle(ct);
 			}
-			if (aPlayer.cur > -1 && aPlayer.audio.buffered.length > 0)
-			{
+			if (aPlayer.cur > -1 && aPlayer.audio.buffered.length > 0) {
 				progressBar.setValueBuffer(aPlayer.audio.buffered.end(aPlayer.audio.buffered.length-1) / aPlayer.audio.duration * 100);
 			}
-			else
-			{
+			else {
 				progressBar.setValueBuffer(0);
 			}
 			var curTimestamp = Math.floor(new Date().getTime() / 1000);
-			if (aPlayer.cur == -2 && (curTimestamp < aPlayer.schedule[0] || aPlayer.getCurrentTime() > aPlayer.getDuration()))
-			{
+			if (aPlayer.cur == -2 && (curTimestamp < aPlayer.schedule[0] || aPlayer.getCurrentTime() > aPlayer.getDuration())) {
 				window.location.reload();
 			}
 		}, 500);
@@ -101,7 +97,8 @@ var aPlayer = {
 
 		this.canvas.setAttribute("width", window.innerWidth);
 		this.canvas.setAttribute("height", window.innerHeight);
-		window.addEventListener("resize", function(event) {
+		window.addEventListener("resize", function(event)
+		{
 			aPlayer.canvas.setAttribute("width", window.innerWidth);
 			aPlayer.canvas.setAttribute("height", window.innerHeight);
 		});
@@ -114,7 +111,7 @@ var aPlayer = {
 
 	draw: function() {
 		aPlayer.analyser.getByteFrequencyData(aPlayer.dataArray);
-		
+
 		var barWidth = (window.innerWidth / aPlayer.bufferLength) * 2.5;
 		var barHeight;
 		var x = 0;
@@ -151,10 +148,8 @@ var aPlayer = {
 		requestAnimationFrame(aPlayer.draw);
 	},
 
-	open: function(num)
-	{
-		if (!aPlayer.initialized)
-		{
+	open: function(num) {
+		if (!aPlayer.initialized) {
 			aPlayer.init();
 		}
 
@@ -164,6 +159,8 @@ var aPlayer = {
 		var mdArtwork = aPlayer.list[num].getAttribute("data-art");
 		var mdArtworkSize = aPlayer.list[num].getAttribute("data-artsize");
 		var mdDate = aPlayer.list[num].getAttribute("data-date");
+		var mdTracklist = aPlayer.list[num].getAttribute("data-tracklist");
+
 		document.getElementById("play-pause").innerHTML = "play_circle_outline";
 		aPlayer.times.innerHTML = "";
 		aPlayer.startedPlayingAt = Math.floor(new Date().getTime() / 1000);
@@ -173,12 +170,12 @@ var aPlayer = {
 		document.getElementById("player-art").src = mdArtwork;
 		document.getElementById("player-title").innerHTML = mdTitle;
 		document.getElementById("player-show").innerHTML = mdShow;
-		if ('mediaSession' in navigator)
-		{
+		if ('mediaSession' in navigator) {
 			navigator.mediaSession.playbackState = "none";
 			navigator.mediaSession.metadata = new MediaMetadata({
 				title: mdTitle,
 				artist: mdShow,
+				album: mdShow + " " + mdTitle,
 				artwork: [
 					{
 						sizes: mdArtworkSize,
@@ -196,7 +193,13 @@ var aPlayer = {
 		}
 
 		document.getElementById("player-extra").innerHTML = "Broadcasted on " + mdDate;
-		
+		if (mdTracklist != "null") {
+			tlHandler.enable(mdTracklist);
+		}
+		else {
+			tlHandler.disable();
+		}
+
 		document.getElementsByTagName("footer")[0].style.bottom = "0px";
 
 		aPlayer.cur = num;
@@ -204,10 +207,8 @@ var aPlayer = {
 		aPlayer.play();
 	},
 
-	openLive: function(elem)
-	{
-		if (!aPlayer.initialized)
-		{
+	openLive: function(elem) {
+		if (!aPlayer.initialized) {
 			aPlayer.init();
 		}
 
@@ -217,7 +218,7 @@ var aPlayer = {
 		var mdShow = elem.getAttribute("data-show");
 		var mdArtwork = elem.getAttribute("data-art");
 		var mdArtworkSize = elem.getAttribute("data-artsize");
-		var mdDate = elem.getAttribute("data-date");
+
 		document.getElementById("play-pause").innerHTML = "play_circle_outline";
 		aPlayer.times.innerHTML = "";
 		aPlayer.schedule = elem.getAttribute("data-schedule").split("/");
@@ -230,13 +231,12 @@ var aPlayer = {
 		document.getElementById("player-art").src = mdArtwork;
 		document.getElementById("player-title").innerHTML = mdTitle;
 		document.getElementById("player-show").innerHTML = mdShow;
-		if ('mediaSession' in navigator)
-		{
+		if ('mediaSession' in navigator) {
 			navigator.mediaSession.playbackState = "none";
 			navigator.mediaSession.metadata = new MediaMetadata({
 				title: mdTitle,
 				artist: mdShow,
-				album: mdRadio,
+				album: mdShow + " " + mdTitle,
 				artwork: [
 					{
 						sizes: mdArtworkSize,
@@ -259,164 +259,156 @@ var aPlayer = {
 		aPlayer.play();
 	},
 
-	togglePlayPause: function()
-	{
-		if (aPlayer.cur == -1)
+	togglePlayPause: function() {
+		if (aPlayer.cur == -1) {
 			return aPlayer.open(0, false);
-		if (aPlayer.audio.paused)
+		}
+		if (aPlayer.audio.paused) {
 			return aPlayer.play();
+		}
 		return aPlayer.pause();
 	},
 
-	play: function()
-	{
-		if (aPlayer.cur == -1)
+	play: function() {
+		if (aPlayer.cur == -1) {
 			return aPlayer.open(0, false);
-		if (aPlayer.audio.paused)
-		{
+		}
+		if (aPlayer.audio.paused) {
 			aPlayer.audio.play();
 			document.getElementById("play-pause").innerHTML = "pause_circle_outline";
-			if ('mediaSession' in navigator)
-			{
+			if ('mediaSession' in navigator) {
 				navigator.mediaSession.playbackState = "playing";
 			}
 		}
 	},
 
-	pause: function()
-	{
-		if (!aPlayer.audio.paused)
-		{
+	pause: function() {
+		if (!aPlayer.audio.paused) {
 			aPlayer.audio.pause();
 			document.getElementById("play-pause").innerHTML = "play_circle_outline";
-			if ('mediaSession' in navigator)
-			{
+			if ('mediaSession' in navigator) {
 				navigator.mediaSession.playbackState = "paused";
 			}
 		}
 	},
 
-	next: function()
-	{
+	next: function() {
 		if (aPlayer.dir == 1) {
-			if (aPlayer.cur > -1 && aPlayer.cur + 1 < aPlayer.epamount)
+			if (aPlayer.cur > -1 && aPlayer.cur + 1 < aPlayer.epamount) {
 				aPlayer.open(aPlayer.cur + 1, false);
-			else
+			}
+			else {
 				aPlayer.open(0, false);
+			}
 		}
-		else
-		{
-			if (aPlayer.cur > 0)
+		else {
+			if (aPlayer.cur > 0) {
 				aPlayer.open(aPlayer.cur - 1, false);
-			else
+			}
+			else {
 				aPlayer.open(aPlayer.epamount - 1, false);
+			}
 		}
 	},
 
-	previous: function()
-	{
-		if (aPlayer.dir == 1)
-		{
-			if (aPlayer.cur > 0)
+	previous: function() {
+		if (aPlayer.dir == 1) {
+			if (aPlayer.cur > 0) {
 				aPlayer.open(aPlayer.cur - 1, false);
-			else
+			}
+			else {
 				aPlayer.open(aPlayer.epamount - 1, false);
+			}
 		}
-		else
-		{
-			if (aPlayer.cur > -1 && aPlayer.cur + 1 < aPlayer.epamount)
+		else {
+			if (aPlayer.cur > -1 && aPlayer.cur + 1 < aPlayer.epamount) {
 				aPlayer.open(aPlayer.cur + 1, false);
-			else
+			}
+			else {
 				aPlayer.open(0, false);
+			}
 		}
 	},
 
-	getDuration: function()
-	{
-		if (aPlayer.cur != -2)
-		{
+	getDuration: function() {
+		if (aPlayer.cur != -2) {
 			return Math.floor(aPlayer.audio.duration);
 		}
-		else
-		{
+		else {
 			return aPlayer.schedule[1] - aPlayer.schedule[0];
 		}
 	},
 
 	getCurrentTime: function() {
-		if (aPlayer.cur != -2)
-		{
+		if (aPlayer.cur != -2) {
 			return Math.floor(aPlayer.audio.currentTime);
 		}
-		else
-		{
+		else {
 			return aPlayer.startedPlayingAt + aPlayer.audio.currentTime - aPlayer.schedule[0];
 		}
 	},
 
-	updateTimes: function(time, dur)
-	{
-		if (dur != Infinity)
-		{
+	updateTimes: function(time, dur) {
+		if (dur != Infinity) {
 			aPlayer.times.innerHTML = formatSeconds(time) + " / " + formatSeconds(dur);
 		}
-		else
-		{
+		else {
 			var tempDate = new Date();
 			aPlayer.times.innerHTML = tempDate.getHours() + ":" + ("0" + tempDate.getMinutes()).slice(-2) + ":" + ("0" + tempDate.getSeconds()).slice(-2);
 		}
 	},
 
-	seekTo: function(time)
-	{
+	seekTo: function(time) {
 		aPlayer.audio.currentTime = time;
+		tlHandler.handle(time, true);
 	},
 
-	skipBack: function()
-	{
+	skipBack: function() {
 		var curTime = aPlayer.getCurrentTime();
-		if (curTime > 10)
+
+		if (curTime > 10) {
 			aPlayer.seekTo(curTime - 10);
+		}
 	},
 
-	skipForward: function()
-	{
+	skipForward: function() {
 		var curTime = aPlayer.getCurrentTime();
-		if (curTime < aPlayer.getDuration() - 11)
+
+		if (curTime < aPlayer.getDuration() - 11) {
 			aPlayer.seekTo(curTime + 10);
+		}
 	},
 
-	volumeUp: function()
-	{
-		if (aPlayer.audio.volume < 0.9)
+	volumeUp: function() {
+		if (aPlayer.audio.volume < 0.9) {
 			aPlayer.audio.volume += 0.1;
-		else
+		}
+		else {
 			aPlayer.audio.volume = 1;
+		}
 	},
 
-	volumeDown: function()
-	{
-		if (aPlayer.audio.volume > 0.1)
+	volumeDown: function() {
+		if (aPlayer.audio.volume > 0.1) {
 			aPlayer.audio.volume -= 0.1;
-		else
+		}
+		else {
 			aPlayer.audio.volume = 0;
+		}
 	},
 
-	setVolume: function(vol)
-	{
+	setVolume: function(vol) {
 		aPlayer.audio.volume = vol;
 	},
 
-	mute: function()
-	{
-		if (aPlayer.audio.muted || aPlayer.audio.volume == 0)
-		{
+	mute: function() {
+		if (aPlayer.audio.muted || aPlayer.audio.volume == 0) {
 			aPlayer.audio.muted = false;
-			if (aPlayer.audio.volume < 0.1)
-				aPlayer.audio.volume = 0.1;
 		}
-		else
-		{
+		if (aPlayer.audio.volume < 0.1) {
+			aPlayer.audio.volume = 0.1;
+		}
+		else {
 			aPlayer.audio.muted = true;
 		}
 	}

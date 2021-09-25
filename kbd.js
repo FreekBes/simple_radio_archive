@@ -2,13 +2,12 @@ var keyDebug = false;
 
 window.addEventListener("keydown", function(e) {
 	if (e.target.type != 'text' && e.target.nodeName != 'TEXTAREA' && e.target.getAttribute("contenteditable") == null) {
-		
 		var key = e.keyCode || e.which;
-		
+
 		if (keyDebug === true) {
 			alert("Keycode for KEYDOWN: " + key);
 		}
-		
+
 		switch(key) {
 			case 75:	// [K]
 			case 32:	// [SPACE]
@@ -90,11 +89,14 @@ window.addEventListener("keydown", function(e) {
 			case 66:	// [B]
 				searchBLEDom();
 				break;
+			case 85:	// [U]
+				aPlayer.unformattedSeconds = true;
+				break;
 			case 116:	// [F5]
 				window.location.reload();
 				break;
 		}
-		
+
 		return false;
 	}
 });

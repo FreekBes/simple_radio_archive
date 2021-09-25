@@ -1,4 +1,5 @@
-function onDisconnected(event) {
+function onDisconnected(event)
+{
 	const device = event.target;
 	console.log(`Device ${device.name} is disconnected.`);
 }
@@ -62,17 +63,21 @@ function setColorHex(hexColor, onSuccess) {
 		console.warn("Hex color is empty!");
 		return;
 	}
+
 	var rgbColor = hexToRgb(hexColor);
+
 	setColor(rgbColor.r, rgbColor.g, rgbColor.b, onSuccess);
 }
 
 function setBrightness(brightness, onSuccess) {
 	var command = new Uint8Array([0x7e, 0x00, 0x01, limitPerc(brightness), 0x00, 0x00, 0x00, 0x00, 0xef]).buffer;
+
 	sendCommand(command, onSuccess);
 }
 
 function setEffectSpeed(speed) {
 	var command = new Uint8Array([0x7e, 0x00, 0x02, limitPerc(speed), 0x00, 0x00, 0x00, 0x00, 0xef]).buffer;
+
 	sendCommand(command);
 }
 

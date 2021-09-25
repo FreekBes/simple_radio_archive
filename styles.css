@@ -284,6 +284,14 @@ footer button.player-ctrl:hover, footer button.player-ctrl:focus {
 #player-extra {
 	color: #515151;
 	font-size: 10px;
+	height: 12px;
+	transition: height 0.2s ease-in-out, color 0.2s ease-in-out 0.2s;
+}
+
+#player-extra:empty {
+	color: #212121;
+	height: 0px;
+	transition: color 0.2s ease-in-out, height 0.2s ease-in-out 0.2s;
 }
 
 #player-times {
@@ -358,18 +366,18 @@ footer button.player-ctrl:hover, footer button.player-ctrl:focus {
 	border-radius: 5px;
 	background-color: #23AD61;
 	transition: background-color 1s;
-	
+
 	position: absolute;
 	right: -5px;
 	top: -3px;
-	
+
 	animation: progresshover 0.1s 1 alternate ease-in-out;
 	animation-fill-mode: forwards;
 }
 
 @keyframes progresshover {
 	from {
-		
+
 	}
 	to {
 		width: 16px;
