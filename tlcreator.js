@@ -29,6 +29,21 @@ var tlCreator = {
 		}
 	},
 
+	loadListWithoutTimes: function(listWithoutTimes) {
+		// add assumed times
+		var avgRegionDuration = Math.floor(Math.floor(tlCreator.wavesurfer.getDuration()) / listWithoutTimes.length);
+		var f = 0;
+		var t = avgRegionDuration;
+		for (var i = 0; i < listWithoutTimes.length; i++) {
+			listWithoutTimes[i].from = f;
+			listWithoutTimes[i].to = t;
+			f = t;
+			t += avgRegionDuration;
+		}
+		console.log(listWithoutTimes);
+		tlCreator.loadList(listWithoutTimes);
+	},
+
 	unloadRegionForm: function() {
 		tlCreator.formRegion = null;
 		document.getElementById("start").value = "";
@@ -196,6 +211,7 @@ var tlCreator = {
 			});
 			document.getElementById("importurl").disabled = false;
 			document.getElementById("export").disabled = false;
+			document.getElementById("import").disabled = false;
 		});
 
 		tlCreator.wavesurfer.on("error", function(str) {
@@ -288,6 +304,15 @@ var tlCreator = {
 			}
 		});
 
+		document.getElementById("import").addEventListener("click", function(event) {
+			event.target.blur();
+			var w = 394;
+			var h = 700;
+			var y = window.top.outerHeight / 2 + window.top.screenY - ( h / 2);
+			var x = window.top.outerWidth / 2 + window.top.screenX - ( w / 2);
+			var inputWindow = window.open("tlparser.php", "inputwindow", "location=no,menubar=no,status=no,toolbar=no,directories=no,scrollbars=no,width="+w+",height="+h+",top="+y+",left="+x);
+		});
+
 		document.getElementById("importurl").addEventListener("click", function(event) {
 			event.target.blur();
 			var input = prompt("Open JSON file from URL...", "https://");
@@ -349,10 +374,6 @@ var tlCreator = {
 		});
 
 		document.getElementById("loading").style.display = "none";
-		window.addEventListener("beforeunload", function(event) {
-			tlCreator.loadingText.innerHTML = "Goodbye";
-			document.getElementById("loading").style.display = "table";
-		});
 	}
 };
 

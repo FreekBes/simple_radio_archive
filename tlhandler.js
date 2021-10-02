@@ -41,7 +41,7 @@ var tlHandler = {
 				}
 				if ('mediaSession' in navigator) {
 					navigator.mediaSession.metadata.artist = tlHandler.list[i].artists[0];
-					if (tlHandler.list[i].title_version) {
+					if (tlHandler.list[i].title_version && tlHandler.list[i].title_version != "") {
 						navigator.mediaSession.metadata.title = tlHandler.list[i].title + " (" + tlHandler.list[i].title_version + ")";
 					}
 					else {

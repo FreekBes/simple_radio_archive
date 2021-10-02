@@ -34,10 +34,10 @@
 			<div id="waveformdata"></div>
 			<form id="editor">
 				<label for="start">Start second</label>
-				<input type="number" id="start" name="start" />
+				<input type="number" id="start" name="start" required />
 
 				<label for="end">End second</label>
-				<input type="number" id="end" name="end" />
+				<input type="number" id="end" name="end" required />
 
 				<label for="artists">Artist(s) <small>(separated by commas)</small></label>
 				<input type="text" id="artists" name="artists" />
@@ -70,5 +70,10 @@
 		</div>
 	</div>
 	<script type="application/javascript" src="tlcreator.js?v=<?php echo $v; ?>"></script>
+	<script>
+	window.onbeforeunload = function() {
+		return "Are you sure you want to close this tab?";
+	};
+	</script>
 </body>
 </html>
