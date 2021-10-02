@@ -37,6 +37,15 @@ function limitPerc(number) {
 	return number;
 }
 
+function getRandomRgba(a) {
+	if (a == null) {
+		return 'rgba(' + Math.round(Math.random()*255) + ',' + Math.round(Math.random()*255) + ',' + Math.round(Math.random()*255) + ',' + Math.random().toFixed(1) + ')';
+	}
+	else {
+		return 'rgba(' + Math.round(Math.random()*255) + ',' + Math.round(Math.random()*255) + ',' + Math.round(Math.random()*255) + ',' + a + ')';
+	}
+}
+
 function getParameterByName(name, url) {
 	if (!url) url = window.location.href;
 	name = name.replace(/[\[\]]/g, "\\$&");

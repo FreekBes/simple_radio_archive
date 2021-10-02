@@ -13,6 +13,7 @@ html {
 body, #contents {
 	background-color: #333333;
 	color: #EDEDED;
+	caret-color: #EDEDED;
 	font-family: Roboto, Verdana, Arial, Sans-Serif;
 	font-size: 16px;
 	padding: 0px;
@@ -480,4 +481,52 @@ nav button:focus {
 nav button:disabled {
 	color: #919191;
 	cursor: not-allowed;
+}
+
+#editor {
+	display: block;
+	padding: 8px;
+	text-align: left;
+}
+
+#editor label {
+	display: block;
+	font-size: 14px;
+	margin-top: 12px;
+	margin-bottom: 1px;
+}
+
+#editor input {
+	display: block;
+	margin-bottom: 4px;
+	color: inherit;
+	font-size: 15px;
+	background: #434343;
+	border: solid 1px #1A1A1A;
+	border-radius: 3px;
+	outline: 0;
+	transition: 0.4s;
+}
+
+#editor input:hover {
+	background: #484848;
+	transition: 0.1s;
+}
+
+#editor input:focus {
+	border-color: #127940;
+	transition: 0.05s;
+}
+
+#editor input[type=text],
+#editor input[type=number] {
+	width: 100%;
+	max-width: 500px;
+	padding: 7px 0px 7px 6px;
+	cursor: text;
+}
+
+#editor input[type=checkbox] {
+	width: 16px;
+	height: 16px;
 }

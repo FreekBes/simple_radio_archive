@@ -25,12 +25,39 @@
 			<h1>Tracklist Creator</h1>
 		</header>
 		<nav>
-			<button id="open">Open</button>
-			<button id="import" disabled>Import</button>
+			<button id="open">Open audio</button>
+			<button id="importurl" disabled>Import tracklist from URL</button>
+			<button id="import" disabled>Import tracklist from text</button>
+			<button id="export" disabled>Export to JSON</button>
 		</nav>
 		<main style="padding-left: 0px; padding-right: 0px;">
 			<div id="waveformdata"></div>
 			<form id="editor">
+				<label for="start">Start second</label>
+				<input type="number" id="start" name="start" />
+
+				<label for="end">End second</label>
+				<input type="number" id="end" name="end" />
+
+				<label for="artists">Artist(s) <small>(separated by commas)</small></label>
+				<input type="text" id="artists" name="artists" />
+
+				<label for="title">Title</label>
+				<input type="text" id="title" name="title" />
+
+				<label for="title_version">Title version <small>(for remixes etc.)</small></label>
+				<input type="text" id="title_version" name="title_version" />
+
+				<label for="radio_section">Radio section <small>(for recurring sections of the programme)</small></label>
+				<input type="text" id="radio_section" name="radio_section" />
+
+				<label for="override">Override <small>(overrides all previous fields when displayed in player)</small></label>
+				<input type="text" id="override" name="override" />
+
+				<label for="skip">Skip <small>(if checked, this segment is skipped during playback)</small></label>
+				<input type="checkbox" id="skip" name="skip" />
+
+				<button type="reset" id="delete">Delete current segment</button>
 			</form>
 		</main>
 	</div>

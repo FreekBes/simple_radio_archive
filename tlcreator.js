@@ -1,7 +1,97 @@
 var tlCreator = {
-	pxPerSec: 10,
+	pxPerSec: 6,
+	url: null,
+	list: null,
 	wavesurfer: null,
+	formRegion: null,
 	loadingText: null,
+	jsonReq: null,
+
+	reloadList: function() {
+		tlCreator.wavesurfer.regions.clear();
+		if(tlCreator.list == null) {
+			return;
+		}
+		for (var i = 0; i < tlCreator.list.length; i++) {
+			tlCreator.wavesurfer.regions.add({
+				start: tlCreator.list[i].from,
+				end: tlCreator.list[i].to,
+				drag: true,
+				resize: true,
+				preventContextMenu: true,
+				color: getRandomRgba(0.1),
+				data: {
+					artists: tlCreator.list[i].artists,
+					title: tlCreator.list[i].title,
+					titleVersion: tlCreator.list[i].titleVersion,
+					radioSection: tlCreator.list[i].radioSection,
+					override: tlCreator.list[i].override,
+					skip: tlCreator.list[i].skip
+				}
+			});
+		}
+	},
+
+	unloadRegionForm: function() {
+		tlCreator.formRegion = null;
+		document.getElementById("start").value = "";
+		document.getElementById("end").value = "";
+		document.getElementById("artists").value = "";
+		document.getElementById("title").value = "";
+		document.getElementById("title_version").value = "";
+		document.getElementById("radio_section").value = "";
+		document.getElementById("override").value = "";
+		document.getElementById("skip").checked = false;
+	},
+
+	loadRegionIntoForm: function(region) {
+		tlCreator.unloadRegionForm();
+		tlCreator.formRegion = region;
+		document.getElementById("start").value = region.start;
+		document.getElementById("end").value = region.end;
+		if (region.data.artists != null && region.data.artists != undefined) {
+			document.getElementById("artists").value = region.data.artists.join(", ");
+		}
+		else {
+			document.getElementById("artists").value = "";
+		}
+		if (region.data.title != null && region.data.title != undefined) {
+			document.getElementById("title").value = region.data.title;
+		}
+		else {
+			document.getElementById("title").value = "";
+		}
+		if (region.data.titleVersion != null && region.data.titleVersion != undefined) {
+			document.getElementById("title_version").value = region.data.titleVersion;
+		}
+		else {
+			document.getElementById("title_version").value = "";
+		}
+		if (region.data.radioSection != null && region.data.radioSection != undefined) {
+			document.getElementById("radio_section").value = region.data.radioSection;
+		}
+		else {
+			document.getElementById("radio_section").value = "";
+		}
+		if (region.data.override != null && region.data.override != undefined) {
+			document.getElementById("override").value = region.data.override;
+		}
+		else {
+			document.getElementById("override").value = "";
+		}
+		document.getElementById("skip").checked = (region.data.skip ? true : false);
+	},
+
+	open: function(link) {
+		try {
+			var url = new URL(link);
+			document.getElementById("loading").style.display = "table";
+			tlCreator.wavesurfer.load(url);
+		}
+		catch (err) {
+			alert("ERROR: " + err.message);
+		}
+	},
 
 	init: function() {
 		tlCreator.loadingText = document.getElementById("loadingtext");
@@ -16,7 +106,7 @@ var tlCreator = {
 			responsive: false,
 			hideScrollbar: false,
 			pixelRatio: 1,
-			minPxPerSec: 10,
+			minPxPerSec: 6,
 			plugins: [
 				WaveSurfer.regions.create({
 					regionsMinLength: 2,
@@ -33,17 +123,20 @@ var tlCreator = {
 			tlCreator.wavesurfer.enableDragSelection({
 				drag: true,
 				resize: true,
-				preventContextMenu: true
+				preventContextMenu: true,
+				color: getRandomRgba(0.1)
 			});
+			document.getElementById("importurl").disabled = false;
 		});
 
 		tlCreator.wavesurfer.on("error", function(str) {
 			console.error(str);
+			alert("ERROR: " + str);
 		});
 
 		tlCreator.wavesurfer.on("loading", function(progress) {
 			if (progress >= 100) {
-				tlCreator.loadingText.innerHTML = "Drawing waveform... This could take a while.";
+				tlCreator.loadingText.innerHTML = "Decoding audio and drawing waveform. This could take a while...";
 			}
 			else {
 				tlCreator.loadingText.innerHTML = "Loading audio... " + progress + "%";
@@ -54,12 +147,54 @@ var tlCreator = {
 			console.log("Region created", region);
 		});
 
-		tlCreator.wavesurfer.on("region-click", function(region) {
-			console.log("Region clicked", region);
+		tlCreator.wavesurfer.on("region-update-end", function(region) {
+			tlCreator.wavesurfer.enableDragSelection({
+				drag: true,
+				resize: true,
+				preventContextMenu: true,
+				color: getRandomRgba(0.1)
+			});
 		});
 
-		tlCreator.wavesurfer.on("region-dblclick", function(region) {
-			console.log("Region double clicked", region);
+		tlCreator.wavesurfer.on("region-updated", function(region) {
+			if (tlCreator.formRegion != null && tlCreator.formRegion.id == region.id) {
+				tlCreator.loadRegionIntoForm(region);
+			}
+		});
+
+		tlCreator.wavesurfer.on("seek", function(progress) {
+			if (tlCreator.wavesurfer.isPlaying()) {
+				tlCreator.wavesurfer.pause();
+			}
+			else {
+				tlCreator.wavesurfer.play();
+			}
+		});
+
+		tlCreator.wavesurfer.on("region-click", function(region, e) {
+			e.stopPropagation();
+			tlCreator.loadRegionIntoForm(region);
+		});
+
+		tlCreator.wavesurfer.on("region-in", function(region) {
+			tlCreator.loadRegionIntoForm(region);
+		});
+
+		tlCreator.wavesurfer.on("region-out", function(region) {
+			tlCreator.unloadRegionForm();
+		});
+
+		tlCreator.wavesurfer.on("region-dblclick", function(region, e) {
+			if (tlCreator.wavesurfer.isPlaying()) {
+				tlCreator.wavesurfer.pause();
+				return;
+			}
+			if (e.shiftKey) {
+				region.playLoop();
+			}
+			else {
+				region.play();
+			}
 		});
 
 		document.getElementById("open").addEventListener("click", function(event) {
@@ -70,14 +205,55 @@ var tlCreator = {
 			}
 		});
 
+		document.getElementById("delete").addEventListener("click", function(event) {
+			event.target.blur();
+			if (tlCreator.formRegion != null) {
+				var conf = confirm("Are you sure you want to delete this segment?");
+				if (conf) {
+					tlCreator.formRegion.remove();
+				}
+			}
+		});
+
+		document.getElementById("importurl").addEventListener("click", function(event) {
+			event.target.blur();
+			var input = prompt("Open JSON file from URL...", "https://");
+			if (input != null && input != "https://") {
+				if (tlCreator.jsonReq != null) {
+					tlCreator.jsonReq.abort();
+				}
+				tlCreator.jsonReq = new XMLHttpRequest();
+				tlCreator.jsonReq.addEventListener("load", function() {
+					try {
+						tlCreator.list = JSON.parse(this.responseText);
+						tlCreator.reloadList();
+					}
+					catch (err) {
+						console.error(err);
+						alert("ERROR: failed to parse existing tracklist.");
+					}
+				});
+				tlCreator.jsonReq.addEventListener("error", function(err) {
+					alert("ERROR: " + err.message);
+				});
+				tlCreator.jsonReq.open("GET", input);
+				tlCreator.jsonReq.send();
+			}
+		});
+
 		document.getElementById("waveformdata").addEventListener("wheel", function(event) {
 			event.preventDefault();
 
-			tlCreator.pxPerSec += event.deltaY * -0.05;
-			// Restrict pxPerSec
-			tlCreator.pxPerSec = Math.min(Math.max(1, tlCreator.pxPerSec), 60);
-			tlCreator.wavesurfer.zoom(tlCreator.pxPerSec);
-			console.log("pxPerSec: ", tlCreator.pxPerSec);
+			if (event.ctrlKey) {
+				tlCreator.pxPerSec += event.deltaY * -0.05;
+				// Restrict pxPerSec
+				tlCreator.pxPerSec = Math.min(Math.max(1, tlCreator.pxPerSec), 60);
+				tlCreator.wavesurfer.zoom(tlCreator.pxPerSec);
+				console.log("pxPerSec: ", tlCreator.pxPerSec);
+			}
+			else {
+				document.getElementById("waveformdata").children[0].scrollLeft += event.deltaY;
+			}
 		});
 
 		document.getElementById("loading").style.display = "none";
@@ -85,17 +261,6 @@ var tlCreator = {
 			tlCreator.loadingText.innerHTML = "Goodbye";
 			document.getElementById("loading").style.display = "table";
 		});
-	},
-
-	open: function(link) {
-		try {
-			var url = new URL(link);
-			document.getElementById("loading").style.display = "table";
-			tlCreator.wavesurfer.load(url);
-		}
-		catch (err) {
-			alert("Could not open audio file: " + err.message);
-		}
 	}
 };
 
