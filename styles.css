@@ -417,3 +417,67 @@ footer button.player-ctrl:hover, footer button.player-ctrl:focus {
 		font-size: 10px;
 	}
 }
+
+#spinner {
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	padding: 0px;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+
+	border: 7px solid rgba(0,0,0,0);
+	border-top: 7px solid;
+	border-top-color: #127940;
+	transition: border-top-color 1s;
+	border-radius: 30px;
+	animation: spin 0.8s linear infinite;
+}
+
+#loadingtext {
+	margin-top: 28px;
+	font-size: 18px;
+}
+
+#loadingtext:empty {
+	margin-top: 0px;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+/* TRACKLIST EDITOR */
+nav {
+	display: block;
+	background: #127940;
+	padding: 0px 8px;
+}
+
+nav button {
+	display: inline-block;
+	cursor: pointer;
+	background: inherit;
+	color: inherit;
+	transition: background 0.4s;
+	margin: 0px;
+	padding: 8px 28px;
+	border: none;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	text-align: center;
+	font-weight: normal;
+}
+
+nav button:hover,
+nav button:focus {
+	background: #23AD61;
+	transition: background 0.05s;
+}
+
+nav button:disabled {
+	color: #919191;
+	cursor: not-allowed;
+}
