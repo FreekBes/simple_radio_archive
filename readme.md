@@ -49,6 +49,13 @@ If you're using streamripper to rip the episode directly into the folder listed 
 To add custom cover art to specific episodes, just place a JPG file in the same folder as the audio file, with the exact same name (although the date part is not required). The system will use this image file automatically. It does not need to be of any specific size, although a square image is recommended.
 
 
+## Add tracklists to episodes
+
+To add tracklists to specific episodes, use the Tracklist Creator tool to generate the necessary files. This tool is available at *YourArchiveUrl/tlcreator.php* in any modern web browser. Over here, you can load an episode by clicking "Open Audio" and pasting the URL of the episode you want to create the tracklist for (rightclick the episode in the archive and choose for "copy link"). Then, you can load a tracklist from text, or modify an existing one by importing it from a URL. Use the mouse cursor and the form below the audiowaves to modify the tracklist. Once done, press "Export to JSON" to save the necessary file for this episode. Then place this file in the same folder as the audio files for your radio show.
+
+This process is still in development and is likely to change in the future.
+
+
 ## Keyboard shortcuts
 
 - <kbd>K</kbd> <kbd>SPACE</kbd> Play / Pause
