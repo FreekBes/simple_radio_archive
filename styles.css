@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
 	display: block;
 	width: 100%;
 }
@@ -10,7 +11,8 @@ html {
 	height: 100%;
 }
 
-body, #contents {
+body,
+#contents {
 	background-color: #333333;
 	color: #EDEDED;
 	caret-color: #EDEDED;
@@ -30,7 +32,8 @@ body, #contents {
 	box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
 }
 
-a, a:visited {
+a,
+a:visited {
 	color: #127940;
 }
 
@@ -98,7 +101,10 @@ h2 {
 	font-size: 12px;
 }
 
-.ep, .ep:visited, .live, .live:visited {
+.ep,
+.ep:visited,
+.live,
+.live:visited {
 	position: relative;
 	display: inline-block;
 	cursor: pointer;
@@ -109,7 +115,10 @@ h2 {
 	background: rgba(255,255,255,0);
 }
 
-.ep:hover, .ep:focus, .live:hover, .live:focus {
+.ep:hover,
+.ep:focus,
+.live:hover,
+.live:focus {
 	background: rgba(255,255,255,.1) !important;
 	color: #23AD61;
 	text-decoration: none;
@@ -133,7 +142,8 @@ h2 {
 	outline: 0;
 }
 
-.show-more:hover, .show-more:focus {
+.show-more:hover,
+.show-more:focus {
 	background: rgba(255,255,255,.2);
 }
 
@@ -147,7 +157,8 @@ h2 {
 	100% { background-color: rgba(255,255,255,0) }
 }
 
-.ep img, .live img {
+.ep img,
+.live img {
 	display: block;
 	width: 156px;
 	height: 156px;
@@ -248,7 +259,8 @@ footer button.player-ctrl {
 	color: #EDEDED;
 }
 
-footer button.player-ctrl:hover, footer button.player-ctrl:focus {
+footer button.player-ctrl:hover,
+footer button.player-ctrl:focus {
 	opacity: 1;
 	outline: 0;
 }
