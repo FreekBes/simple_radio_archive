@@ -19,7 +19,7 @@ var tlCreator = {
 				drag: true,
 				resize: true,
 				preventContextMenu: true,
-				color: getRandomRgba(0.1),
+				color: getRandomRgba(0.2),
 				data: {
 					artists: tlCreator.list[i].artists,
 					title: tlCreator.list[i].title,
@@ -48,7 +48,9 @@ var tlCreator = {
 		tlCreator.unloadRegionForm();
 		tlCreator.formRegion = region;
 		document.getElementById("start").value = region.start;
+		document.getElementById("end").setAttribute("min", region.start + 2);
 		document.getElementById("end").value = region.end;
+		document.getElementById("start").setAttribute("max", region.end - 2);
 		if (region.data.artists != null && region.data.artists != undefined) {
 			document.getElementById("artists").value = region.data.artists.join(", ");
 		}
@@ -80,6 +82,25 @@ var tlCreator = {
 			document.getElementById("override").value = "";
 		}
 		document.getElementById("skip").checked = (region.data.skip ? true : false);
+	},
+
+	saveRegionForm: function() {
+		var tempArtists = document.getElementById("artists").value.split(",");
+		for (var i = 0; i < tempArtists.length; i++) {
+			tempArtists[i] = tempArtists[i].trim();
+		}
+		tlCreator.formRegion.update({
+			start: parseInt(document.getElementById("start").value),
+			end: parseInt(document.getElementById("end").value),
+			data: {
+				artists: tempArtists,
+				title: document.getElementById("title").value,
+				titleVersion: document.getElementById("title_version").value,
+				radioSection: document.getElementById("radio_section").value,
+				override: document.getElementById("override").value,
+				skip: document.getElementById("skip").checked
+			}
+		});
 	},
 
 	open: function(link) {
@@ -124,7 +145,7 @@ var tlCreator = {
 				drag: true,
 				resize: true,
 				preventContextMenu: true,
-				color: getRandomRgba(0.1)
+				color: getRandomRgba(0.2)
 			});
 			document.getElementById("importurl").disabled = false;
 		});
@@ -152,7 +173,7 @@ var tlCreator = {
 				drag: true,
 				resize: true,
 				preventContextMenu: true,
-				color: getRandomRgba(0.1)
+				color: getRandomRgba(0.2)
 			});
 		});
 
@@ -254,6 +275,19 @@ var tlCreator = {
 			else {
 				document.getElementById("waveformdata").children[0].scrollLeft += event.deltaY;
 			}
+		});
+
+		var editorChildren = document.getElementById("editor").children;
+		for (var i = 0; i < editorChildren.length; i++) {
+			if (editorChildren[i].nodeName == "INPUT") {
+				editorChildren[i].addEventListener("change", tlCreator.saveRegionForm);
+			}
+		}
+		document.getElementById("start").addEventListener("change", function(event) {
+			document.getElementById("end").setAttribute("min", parseInt(event.target.value) + 2);
+		});
+		document.getElementById("end").addEventListener("change", function(event) {
+			document.getElementById("start").setAttribute("max", parseInt(event.target.value) - 2);
 		});
 
 		document.getElementById("loading").style.display = "none";
