@@ -7,26 +7,23 @@ var tlCreator = {
 	loadingText: null,
 	jsonReq: null,
 
-	reloadList: function() {
+	loadList: function(list) {
 		tlCreator.wavesurfer.regions.clear();
-		if(tlCreator.list == null) {
-			return;
-		}
-		for (var i = 0; i < tlCreator.list.length; i++) {
+		for (var i = 0; i < list.length; i++) {
 			tlCreator.wavesurfer.regions.add({
-				start: tlCreator.list[i].from,
-				end: tlCreator.list[i].to,
+				start: list[i].from,
+				end: list[i].to,
 				drag: true,
 				resize: true,
 				preventContextMenu: true,
 				color: getRandomRgba(0.2),
 				data: {
-					artists: tlCreator.list[i].artists,
-					title: tlCreator.list[i].title,
-					titleVersion: tlCreator.list[i].titleVersion,
-					radioSection: tlCreator.list[i].radioSection,
-					override: tlCreator.list[i].override,
-					skip: tlCreator.list[i].skip
+					artists: list[i].artists,
+					title: list[i].title,
+					titleVersion: list[i].titleVersion,
+					radioSection: list[i].radioSection,
+					override: list[i].override,
+					skip: list[i].skip
 				}
 			});
 		}
@@ -103,13 +100,63 @@ var tlCreator = {
 		});
 	},
 
-	open: function(link) {
+	exportList: function() {
+		var regionIds = Object.keys(tlCreator.wavesurfer.regions.list);
+		var regionsAmount = regionIds.length;
+		var tracklist = [];
+		var region = null;
+		var tracklistObj = {};
+
+		for (var i = 0; i < regionsAmount; i++) {
+			region = tlCreator.wavesurfer.regions.list[regionIds[i]];
+			tracklistObj = {
+				from: region.start,
+				to: region.end,
+				artists: region.data.artists,
+				title: region.data.title,
+				title_version: region.data.titleVersion,
+				radio_section: region.data.radioSection,
+				override: region.data.override,
+				skip: region.data.skip
+			};
+			tracklist.push(tracklistObj);
+		}
+
+		var tracklistStr = JSON.stringify(tracklist);
+		var dl = document.createElement("a");
+		var file;
+		var filename = tlCreator.url.pathname.split("/").pop().replace(".mp3", ".json");
 		try {
-			var url = new URL(link);
-			document.getElementById("loading").style.display = "table";
-			tlCreator.wavesurfer.load(url);
+			file = new File([tracklistStr], filename, {
+				type: 'application/json'
+			});
 		}
 		catch (err) {
+			file = new Blob([tracklistStr], {
+				type: 'text/plain'
+			});
+		}
+		var url = URL.createObjectURL(file);
+		dl.setAttribute("href", url);
+		dl.setAttribute("download", filename);
+		if (document.createEvent) {
+			var event = document.createEvent('MouseEvents');
+			event.initEvent('click', true, true);
+			dl.dispatchEvent(event);
+		}
+		else {
+			dl.click();
+		}
+	},
+
+	open: function(link) {
+		try {
+			tlCreator.url = new URL(link);
+			document.getElementById("loading").style.display = "table";
+			tlCreator.wavesurfer.load(tlCreator.url);
+		}
+		catch (err) {
+			console.error(err);
 			alert("ERROR: " + err.message);
 		}
 	},
@@ -148,6 +195,7 @@ var tlCreator = {
 				color: getRandomRgba(0.2)
 			});
 			document.getElementById("importurl").disabled = false;
+			document.getElementById("export").disabled = false;
 		});
 
 		tlCreator.wavesurfer.on("error", function(str) {
@@ -210,6 +258,10 @@ var tlCreator = {
 				tlCreator.wavesurfer.pause();
 				return;
 			}
+			if (tlCreator.wavesurfer.getCurrentRegion() && tlCreator.wavesurfer.getCurrentRegion().id == region.id) {
+				tlCreator.wavesurfer.play();
+				return;
+			}
 			if (e.shiftKey) {
 				region.playLoop();
 			}
@@ -246,8 +298,8 @@ var tlCreator = {
 				tlCreator.jsonReq = new XMLHttpRequest();
 				tlCreator.jsonReq.addEventListener("load", function() {
 					try {
-						tlCreator.list = JSON.parse(this.responseText);
-						tlCreator.reloadList();
+						var list = JSON.parse(this.responseText);
+						tlCreator.loadList(list);
 					}
 					catch (err) {
 						console.error(err);
@@ -255,11 +307,17 @@ var tlCreator = {
 					}
 				});
 				tlCreator.jsonReq.addEventListener("error", function(err) {
+					console.error(err);
 					alert("ERROR: " + err.message);
 				});
 				tlCreator.jsonReq.open("GET", input);
 				tlCreator.jsonReq.send();
 			}
+		});
+
+		document.getElementById("export").addEventListener("click", function(event) {
+			event.target.blur();
+			tlCreator.exportList();
 		});
 
 		document.getElementById("waveformdata").addEventListener("wheel", function(event) {
