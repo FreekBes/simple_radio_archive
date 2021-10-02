@@ -1,11 +1,14 @@
 var tlHandler = {
 	enabled: false,
 	list: null,
+	jsonReq: null,
 
 	enable: function(tracklistFile) {
-		var jsonReq = new XMLHttpRequest();
-
-		jsonReq.addEventListener("load", function() {
+		if (tlHandler.jsonReq != null) {
+			tlHandler.jsonReq.abort();
+		}
+		tlHandler.jsonReq = new XMLHttpRequest();
+		tlHandler.jsonReq.addEventListener("load", function() {
 			try {
 				tlHandler.list = JSON.parse(this.responseText);
 				tlHandler.enabled = true;
@@ -15,8 +18,8 @@ var tlHandler = {
 				tlHandler.enabled = false;
 			}
 		});
-		jsonReq.open("GET", tracklistFile);
-		jsonReq.send();
+		tlHandler.jsonReq.open("GET", tracklistFile);
+		tlHandler.jsonReq.send();
 	},
 
 	disable: function() {
