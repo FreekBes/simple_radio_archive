@@ -1,5 +1,7 @@
+var ctrlPressed = false;
+
 var tlCreator = {
-	pxPerSec: 6,
+	pxPerSec: 2,
 	url: null,
 	list: null,
 	wavesurfer: null,
@@ -20,8 +22,8 @@ var tlCreator = {
 				data: {
 					artists: list[i].artists,
 					title: list[i].title,
-					titleVersion: list[i].titleVersion,
-					radioSection: list[i].radioSection,
+					titleVersion: list[i].title_version,
+					radioSection: list[i].radio_section,
 					override: list[i].override,
 					skip: list[i].skip
 				}
@@ -54,11 +56,18 @@ var tlCreator = {
 		document.getElementById("radio_section").value = "";
 		document.getElementById("override").value = "";
 		document.getElementById("skip").checked = false;
+		var regionElems = document.getElementsByClassName("wavesurfer-region");
+		for (var i = 0; i < regionElems.length; i++) {
+			regionElems[i].className = "wavesurfer-region";
+		}
 	},
 
 	loadRegionIntoForm: function(region) {
 		tlCreator.unloadRegionForm();
 		tlCreator.formRegion = region;
+		if (region == null) {
+			return;
+		}
 		document.getElementById("start").value = region.start;
 		document.getElementById("end").setAttribute("min", region.start + 2);
 		document.getElementById("end").value = region.end;
@@ -94,6 +103,7 @@ var tlCreator = {
 			document.getElementById("override").value = "";
 		}
 		document.getElementById("skip").checked = (region.data.skip ? true : false);
+		region.element.className = "wavesurfer-region active";
 	},
 
 	saveRegionForm: function() {
@@ -107,9 +117,9 @@ var tlCreator = {
 			data: {
 				artists: tempArtists,
 				title: document.getElementById("title").value,
-				titleVersion: document.getElementById("title_version").value,
-				radioSection: document.getElementById("radio_section").value,
-				override: document.getElementById("override").value,
+				titleVersion: (document.getElementById("title_version").value == "" ? null : document.getElementById("title_version").value),
+				radioSection: (document.getElementById("radio_section").value == "" ? null : document.getElementById("radio_section").value),
+				override: (document.getElementById("override").value == "" ? null : document.getElementById("override").value),
 				skip: document.getElementById("skip").checked
 			}
 		});
@@ -164,6 +174,135 @@ var tlCreator = {
 		}
 	},
 
+	setRegionOverlayText: function(region) {
+		if (!region.data) {
+			return;
+		}
+		var overlayText = "";
+		if (region.data.override != null && region.data.override != "") {
+			overlayText = region.data.override;
+		}
+		else if (region.data.artists && region.data.artists.length > 0 && region.data.title != null) {
+			if (region.data.radioSection != null && region.data.radioSection != "") {
+				overlayText = region.data.radioSection.toUpperCase() + ": ";
+			}
+			overlayText += region.data.artists[0] + " - " + region.data.title;
+			if (region.data.titleVersion != null && region.data.titleVersion != "") {
+				overlayText += " (" + region.data.titleVersion + ")";
+			}
+		}
+		region.element.setAttribute("data-txt-overlay", overlayText);
+	},
+
+	getBorderingRegions: function(region) {
+		var before;
+		var after;
+		var regionIds = Object.keys(tlCreator.wavesurfer.regions.list);
+		var regionsAmount = regionIds.length;
+		var iRegion;
+
+		for (var i = 0; i < regionsAmount && (before == null || after == null); i++) {
+			if (regionIds[i] == region.id) {
+				continue;
+			}
+			iRegion = tlCreator.wavesurfer.regions.list[regionIds[i]];
+			if (iRegion.end >= region.start - 4 && iRegion.end <= region.start + 4) {
+				before = iRegion;
+			}
+			else if (iRegion.start >= region.end - 4 && iRegion.start <= region.end + 4) {
+				after = iRegion;
+			}
+		}
+		return [before, after];
+	},
+
+	getPreviousRegion: function(region) {
+		var regionIds = Object.keys(tlCreator.wavesurfer.regions.list);
+		var regionsAmount = regionIds.length;
+		var closest = Infinity;
+		var prev;
+
+		var iRegion;
+		for (var i = 0; i < regionsAmount && closest > 0; i++) {
+			if (regionIds[i] == region.id) {
+				continue;
+			}
+			iRegion = tlCreator.wavesurfer.regions.list[regionIds[i]];
+			if (iRegion.end <= region.start) {
+				if (region.start - iRegion.end < closest) {
+					prev = iRegion;
+					closest = region.start - iRegion.end;
+				}
+			}
+		}
+		return (prev);
+	},
+
+	getNextRegion: function(region) {
+		var regionIds = Object.keys(tlCreator.wavesurfer.regions.list);
+		var regionsAmount = regionIds.length;
+		var closest = Infinity;
+		var next;
+
+		var iRegion;
+		for (var i = 0; i < regionsAmount && closest > 0; i++) {
+			if (regionIds[i] == region.id) {
+				continue;
+			}
+			iRegion = tlCreator.wavesurfer.regions.list[regionIds[i]];
+			if (iRegion.start >= region.end) {
+				if (region.end - iRegion.start < closest) {
+					next = iRegion;
+					closest = region.end - iRegion.start;
+				}
+			}
+		}
+		return (next);
+	},
+
+	getFirstRegion: function() {
+		var regionIds = Object.keys(tlCreator.wavesurfer.regions.list);
+		var regionsAmount = regionIds.length;
+		var lowest = Infinity;
+		var first;
+
+		for (var i = 0; i < regionsAmount && lowest != 0; i++) {
+			if (tlCreator.wavesurfer.regions.list[regionIds[i]].start < lowest) {
+				first = tlCreator.wavesurfer.regions.list[regionIds[i]];
+				lowest = first.start;
+			}
+		}
+		return (first);
+	},
+
+	getLastRegion: function() {
+		var regionIds = Object.keys(tlCreator.wavesurfer.regions.list);
+		var regionsAmount = regionIds.length;
+		var highest = -1;
+		var last;
+
+		for (var i = 0; i < regionsAmount; i++) {
+			if (tlCreator.wavesurfer.regions.list[regionIds[i]].end > highest) {
+				last = tlCreator.wavesurfer.regions.list[regionIds[i]];
+				highest = last.end;
+			}
+		}
+		return (last);
+	},
+
+	scrollRegionIntoView: function(region) {
+		if (region != null) {
+			var wave = document.getElementsByTagName("wave")[0];
+			var viewLeft = wave.scrollLeft;
+			var viewRight = viewLeft + wave.offsetWidth - (wave.offsetWidth / 2);
+
+			var scrollTo = parseInt(region.element.style.left);
+			if (scrollTo <= viewLeft || scrollTo >= viewRight) {
+				wave.scrollLeft = scrollTo - 40;
+			}
+		}
+	},
+
 	open: function(link) {
 		try {
 			tlCreator.url = new URL(link);
@@ -184,12 +323,14 @@ var tlCreator = {
 			waveColor: "#23AD61",
 			progressColor: "#127940",
 			backgroundColor: "#555555",
+			cursorColor: "#EDEDED",
 			partialRender: true,
 			scrollParent: true,
 			responsive: false,
 			hideScrollbar: false,
 			pixelRatio: 1,
-			minPxPerSec: 6,
+			minPxPerSec: 2,
+			skipLength: 5,
 			plugins: [
 				WaveSurfer.regions.create({
 					regionsMinLength: 2,
@@ -230,6 +371,11 @@ var tlCreator = {
 
 		tlCreator.wavesurfer.on("region-created", function(region) {
 			console.log("Region created", region);
+			region.update({
+				start: Math.floor(region.start),
+				end: Math.floor(region.end)
+			});
+			tlCreator.setRegionOverlayText(region);
 		});
 
 		tlCreator.wavesurfer.on("region-update-end", function(region) {
@@ -239,25 +385,41 @@ var tlCreator = {
 				preventContextMenu: true,
 				color: getRandomRgba(0.2)
 			});
+			tlCreator.loadRegionIntoForm(region);
 		});
 
-		tlCreator.wavesurfer.on("region-updated", function(region) {
+		tlCreator.wavesurfer.on("region-updated", function(region, e) {
 			if (tlCreator.formRegion != null && tlCreator.formRegion.id == region.id) {
 				tlCreator.loadRegionIntoForm(region);
+			}
+			tlCreator.setRegionOverlayText(region);
+			if (!ctrlPressed && e != undefined) {
+				if (e.action == "resize" || e.action == "drag") {
+					tlCreator.loadRegionIntoForm(region);
+					var borders = tlCreator.getBorderingRegions(region);
+					if (borders[0] != undefined) {
+						borders[0].update({
+							end: region.start
+						});
+					}
+					if (borders[1] != undefined) {
+						borders[1].update({
+							start: region.end
+						});
+					}
+				}
 			}
 		});
 
 		tlCreator.wavesurfer.on("seek", function(progress) {
-			if (tlCreator.wavesurfer.isPlaying()) {
-				tlCreator.wavesurfer.pause();
-			}
-			else {
+			if (!tlCreator.wavesurfer.isPlaying()) {
 				tlCreator.wavesurfer.play();
 			}
 		});
 
 		tlCreator.wavesurfer.on("region-click", function(region, e) {
 			e.stopPropagation();
+			console.log(region);
 			tlCreator.loadRegionIntoForm(region);
 		});
 
@@ -266,16 +428,19 @@ var tlCreator = {
 		});
 
 		tlCreator.wavesurfer.on("region-out", function(region) {
-			tlCreator.unloadRegionForm();
+			if (tlCreator.wavesurfer.regions.getCurrentRegion() == null) {
+				tlCreator.unloadRegionForm();
+			}
 		});
 
 		tlCreator.wavesurfer.on("region-dblclick", function(region, e) {
-			if (tlCreator.wavesurfer.isPlaying()) {
-				tlCreator.wavesurfer.pause();
-				return;
-			}
-			if (tlCreator.wavesurfer.getCurrentRegion() && tlCreator.wavesurfer.getCurrentRegion().id == region.id) {
-				tlCreator.wavesurfer.play();
+			if (tlCreator.wavesurfer.regions.getCurrentRegion() && tlCreator.wavesurfer.regions.getCurrentRegion().id == region.id) {
+				if (tlCreator.wavesurfer.isPlaying()) {
+					tlCreator.wavesurfer.pause();
+				}
+				else {
+					tlCreator.wavesurfer.play();
+				}
 				return;
 			}
 			if (e.shiftKey) {
@@ -315,7 +480,7 @@ var tlCreator = {
 
 		document.getElementById("importurl").addEventListener("click", function(event) {
 			event.target.blur();
-			var input = prompt("Open JSON file from URL...", "https://");
+			var input = prompt("Open JSON file from URL...", tlCreator.url.toString().replace(".mp3", ".json"));
 			if (input != null && input != "https://") {
 				if (tlCreator.jsonReq != null) {
 					tlCreator.jsonReq.abort();
@@ -349,9 +514,9 @@ var tlCreator = {
 			event.preventDefault();
 
 			if (event.ctrlKey) {
-				tlCreator.pxPerSec += event.deltaY * -0.05;
+				tlCreator.pxPerSec += event.deltaY * -0.01;
 				// Restrict pxPerSec
-				tlCreator.pxPerSec = Math.min(Math.max(1, tlCreator.pxPerSec), 60);
+				tlCreator.pxPerSec = Math.min(Math.max(0.5, tlCreator.pxPerSec), 60);
 				tlCreator.wavesurfer.zoom(tlCreator.pxPerSec);
 				console.log("pxPerSec: ", tlCreator.pxPerSec);
 			}
@@ -378,3 +543,77 @@ var tlCreator = {
 };
 
 tlCreator.init();
+
+var keyDebug = false;
+window.addEventListener("keydown", function(e) {
+	if (e.target.type != 'text' && e.target.nodeName != 'TEXTAREA' && e.target.getAttribute("contenteditable") == null) {
+		var key = e.keyCode || e.which;
+
+		if (keyDebug === true) {
+			alert("Keycode for KEYDOWN: " + key);
+		}
+
+		switch(key) {
+			case 32:	// [SPACE]
+			case 75:	// [K]
+				e.preventDefault();
+				if (tlCreator.wavesurfer.isPlaying()) {
+					tlCreator.wavesurfer.pause();
+				}
+				else {
+					tlCreator.wavesurfer.play();
+				}
+				break;
+			case 74:	// [J]
+				tlCreator.wavesurfer.skipBackward();
+				break;
+			case 76:	// [L]
+				tlCreator.wavesurfer.skipForward();
+				break;
+			case 37:	// [ARROW LEFT]
+				e.preventDefault();
+				if (tlCreator.formRegion != null) {
+					tlCreator.loadRegionIntoForm(tlCreator.getPreviousRegion(tlCreator.formRegion));
+					tlCreator.scrollRegionIntoView(tlCreator.formRegion);
+				}
+				else {
+					tlCreator.loadRegionIntoForm(tlCreator.getLastRegion());
+					tlCreator.scrollRegionIntoView(tlCreator.formRegion);
+				}
+				break;
+			case 39:	// [ARROW RIGHT]
+				e.preventDefault();
+				if (tlCreator.formRegion != null) {
+					tlCreator.loadRegionIntoForm(tlCreator.getNextRegion(tlCreator.formRegion));
+					tlCreator.scrollRegionIntoView(tlCreator.formRegion);
+				}
+				else {
+					tlCreator.loadRegionIntoForm(tlCreator.getFirstRegion());
+					tlCreator.scrollRegionIntoView(tlCreator.formRegion);
+				}
+				break;
+			case 46:	// [DEL]
+				document.getElementById("delete").click();
+				break;
+			case 17:	// [CTRL]
+				ctrlPressed = true;
+				break;
+		}
+	}
+});
+
+window.addEventListener("keyup", function(e) {
+	if (e.target.type != 'text' && e.target.nodeName != 'TEXTAREA' && e.target.getAttribute("contenteditable") == null) {
+		var key = e.keyCode || e.which;
+
+		if (keyDebug === true) {
+			alert("Keycode for KEYUP: " + key);
+		}
+
+		switch(key) {
+			case 17:	// [CTRL]
+				ctrlPressed = false;
+				break;
+		}
+	}
+});

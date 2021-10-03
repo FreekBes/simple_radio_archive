@@ -51,7 +51,7 @@
 				<label for="radio_section">Radio section <small>(for recurring sections of the programme)</small></label>
 				<input type="text" id="radio_section" name="radio_section" />
 
-				<label for="override">Override <small>(overrides all previous fields when displayed in player)</small></label>
+				<label for="override">Override <small>(overrides all previous fields when displayed in player, use space to display nothing)</small></label>
 				<input type="text" id="override" name="override" />
 
 				<label for="skip">Skip <small>(if checked, this segment is skipped during playback)</small></label>

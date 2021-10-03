@@ -82,12 +82,14 @@
 		var trackObj = null;
 		var tempSection = null;
 		var input = document.getElementById("listfield").value;
+		var fromJSON = false;
 
 		input = input.replace(/[\u2018\u2019\u0060\u00b4]/g, "'");
 		input = input.replace(/[\u201c\u201d]/g, "\"");
 		if (input[0] == '[') {
 			try {
 				list = JSON.parse(input);
+				fromJSON = true;
 			}
 			catch (err) {
 				alert("Invalid JSON: " + err.message);
@@ -136,7 +138,12 @@
 		try {
 			console.log(list);
 			window.opener.console.log(list);
-			window.opener.tlCreator.loadListWithoutTimes(list);
+			if (fromJSON) {
+				window.opener.tlCreator.loadList(list);
+			}
+			else {
+				window.opener.tlCreator.loadListWithoutTimes(list);
+			}
 			window.opener.focus();
 			window.close();
 		}
