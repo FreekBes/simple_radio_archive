@@ -75,49 +75,63 @@
 		}
 	</style>
 	<script>
-	var artistsRegex = /\s\&\s|\sand\s|\swith\s|\sx\s|,\s|\sfeat\.\s|\sfeaturing\s|\spres\.\s|\spresents\s+/gm;
+	var artistsRegex = /\s\&\s|\sand\s|\swith\s|\sx\s|,\s|\svs\s|\svs\.\s|\sversus\s|\smeets\s|\sfeat\s|\sfeat\.\s|\sfeaturing\s|\spres\s|\spres\.\s|\spresents\s+/gm;
 	function closeMySelf() {
 		var list = [];
 		var templist;
 		var trackObj = null;
 		var tempSection = null;
+		var input = document.getElementById("listfield").value;
 
-		templist = document.getElementById("listfield").value.split("\n");
-		try {
-			for (var i = 0; i < templist.length; i++) {
-				templist[i] = templist[i].split(/\s-\s|\s–\s+/gm);
-				if (templist[i][0].indexOf(":") > -1) {
-					tempSection = templist[i][0].split(": ")[0];
-					templist[i][0] = templist[i][0].split(": ").pop();
-				}
-				else {
-					tempSection = null;
-				}
-				templist[i][0] = templist[i][0].split(artistsRegex);
-				templist[i][1] = templist[i][1].replace(/\[.*\]+/gm, "");
-				templist[i][2] = templist[i][1].substring(templist[i][1].indexOf("(") + 1, templist[i][1].lastIndexOf(")"));
-				templist[i][1] = templist[i][1].replace(/\(.*\)+/gm, "");
-				for (var j = 0; j < templist[i][0].length; j++) {
-					templist[i][0][j] = templist[i][0][j].trim();
-				}
-				templist[i][1] = templist[i][1].trim();
-				templist[i][2] = templist[i][2].trim();
-				trackObj = {
-					from: 0,
-					to: 0,
-					artists: templist[i][0],
-					title: templist[i][1],
-					title_version: templist[i][2],
-					radio_section: tempSection,
-					override: null,
-					skip: false
-				};
-				list.push(trackObj);
+		input = input.replace(/[\u2018\u2019\u0060\u00b4]/g, "'");
+		input = input.replace(/[\u201c\u201d]/g, "\"");
+		if (input[0] == '[') {
+			try {
+				list = JSON.parse(input);
+			}
+			catch (err) {
+				alert("Invalid JSON: " + err.message);
+				return;
 			}
 		}
-		catch (err) {
-			console.error(err);
-			alert("An error occurred while parsing track " + (i+1) + ":\n\n" + err.message);
+		else {
+			templist = input.split("\n");
+			try {
+				for (var i = 0; i < templist.length; i++) {
+					templist[i] = templist[i].split(/\s-\s|\s–\s+/gm);
+					if (templist[i][0].indexOf(":") > -1) {
+						tempSection = templist[i][0].split(": ")[0];
+						templist[i][0] = templist[i][0].split(": ").pop();
+					}
+					else {
+						tempSection = null;
+					}
+					templist[i][0] = templist[i][0].split(artistsRegex);
+					templist[i][1] = templist[i][1].replace(/\[.*\]+/gm, "");
+					templist[i][2] = templist[i][1].substring(templist[i][1].indexOf("(") + 1, templist[i][1].lastIndexOf(")"));
+					templist[i][1] = templist[i][1].replace(/\(.*\)+/gm, "");
+					for (var j = 0; j < templist[i][0].length; j++) {
+						templist[i][0][j] = templist[i][0][j].trim();
+					}
+					templist[i][1] = templist[i][1].trim();
+					templist[i][2] = templist[i][2].trim();
+					trackObj = {
+						from: 0,
+						to: 0,
+						artists: templist[i][0],
+						title: templist[i][1],
+						title_version: templist[i][2],
+						radio_section: tempSection,
+						override: null,
+						skip: false
+					};
+					list.push(trackObj);
+				}
+			}
+			catch (err) {
+				console.error(err);
+				alert("An error occurred while parsing track " + (i+1) + ":\n\n" + err.message);
+			}
 		}
 		try {
 			console.log(list);
