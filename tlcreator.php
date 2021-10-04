@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<meta name="robots" content="noindex" />
 	<title>Tracklist Creator</title>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="styles.css?v=<?php echo $v; ?>" />

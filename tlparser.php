@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<meta name="robots" content="noindex" />
 	<title>Tracklist Parser</title>
 	<style>
 		html, body {

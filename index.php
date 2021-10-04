@@ -67,6 +67,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<?php if ($settings["noindex"] === true) { ?>	<meta name="robots" content="noindex" /><?php } ?>
 	<title><?php echo $settings["title"]; ?></title>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="styles.css?v=<?php echo $v; ?>" />
