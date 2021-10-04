@@ -1,7 +1,7 @@
 var ctrlPressed = false;
 
 var tlCreator = {
-	pxPerSec: 2,
+	pxPerSec: 3.5,
 	url: null,
 	list: null,
 	wavesurfer: null,
@@ -332,7 +332,7 @@ var tlCreator = {
 			responsive: false,
 			hideScrollbar: false,
 			pixelRatio: 1,
-			minPxPerSec: 2,
+			minPxPerSec: 3.5,
 			skipLength: 5,
 			plugins: [
 				WaveSurfer.regions.create({
