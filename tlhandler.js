@@ -43,9 +43,12 @@ var tlHandler = {
 					return;
 				}
 				if (tlHandler.lastPlayIndex != i || forced === true) {
-					if (tlHandler.lastPlayIndex >= 0) {
+					if (tlHandler.lastPlayIndex >= 0 && scrobbler.enabled) {
 						if (tlHandler.beenPlayingFor >= 240 || tlHandler.beenPlayingFor > (tlHandler.list[tlHandler.lastPlayIndex].to - tlHandler.list[tlHandler.lastPlayIndex].from) / 2) {
 							scrobbler.scrobble(tlHandler.list[tlHandler.lastPlayIndex]);
+						}
+						else {
+							console.log("Could not scrobble last track to Last.fm, it wasn't played for long enough.");
 						}
 					}
 					tlHandler.lastPlayIndex = i;
@@ -77,7 +80,7 @@ var tlHandler = {
 				}
 				else if (tlHandler.lastPlayIndex == i) {
 					tlHandler.beenPlayingFor += 0.5;
-					if (tlHandler.beenPlayingFor > 5 && scrobbler.enabled) {
+					if (scrobbler.enabled && !scrobbler.nowPlayingUpdated && tlHandler.beenPlayingFor > 5) {
 						scrobbler.nowPlayingUpdated = true;
 						scrobbler.updateNowPlaying(tlHandler.list[i]);
 					}
