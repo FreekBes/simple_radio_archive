@@ -206,10 +206,10 @@ var tlCreator = {
 				continue;
 			}
 			iRegion = tlCreator.wavesurfer.regions.list[regionIds[i]];
-			if (iRegion.end >= region.start - 4 && iRegion.end <= region.start + 4) {
+			if (iRegion.end >= region.start - 10 && iRegion.end <= region.start + 10) {
 				before = iRegion;
 			}
-			else if (iRegion.start >= region.end - 4 && iRegion.start <= region.end + 4) {
+			else if (iRegion.start >= region.end - 10 && iRegion.start <= region.end + 10) {
 				after = iRegion;
 			}
 		}
@@ -408,6 +408,10 @@ var tlCreator = {
 						});
 					}
 				}
+				region.update({
+					start: Math.floor(region.start),
+					end: Math.floor(region.end)
+				});
 			}
 		});
 
