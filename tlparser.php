@@ -76,7 +76,7 @@
 	</style>
 	<script>
 	var artistsRegex = /\s\&\s|\sand\s|\swith\s|\sx\s|,\s|\svs\s|\svs\.\s|\sversus\s|\smeets\s|\sfeat\s|\sfeat\.\s|\sfeaturing\s|\spres\s|\spres\.\s|\spresents\s+/gm;
-	var artistsFix = {};
+	var artistsFix = <?php echo json_encode(json_decode(file_get_contents(".htsettings.json"), true)["tlcreator"]["artist_split_fix"]); ?>;
 
 	function closeMySelf() {
 		var list = [];
@@ -161,22 +161,6 @@
 		}
 		return false;
 	}
-
-	var jsonReq = new XMLHttpRequest();
-	jsonReq.addEventListener("load", function() {
-		try {
-			var settings = JSON.parse(this.responseText);
-			artistsFix = settings["tlcreator"]["artist_split_fix"];
-		}
-		catch (err) {
-			console.error(err);
-		}
-	});
-	jsonReq.addEventListener("error", function(err) {
-		console.error(err);
-	});
-	jsonReq.open("GET", "settings.json");
-	jsonReq.send();
 	</script>
 </head>
 <body>

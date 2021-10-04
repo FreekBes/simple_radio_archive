@@ -62,6 +62,9 @@
 			}
 		}
 	],
+	"scrobbler": {
+		"api_key": null
+	},
 	"tlcreator": {
 		"artist_split_fix": {
 			"aly": "Aly & Fila",

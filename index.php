@@ -55,7 +55,7 @@
 		echo '<button class="show-more" onclick="expandShow(this);">View older '.$showname.' episodes</button>';
 	}
 
-	$settings = json_decode(file_get_contents("settings.json"), true);
+	$settings = json_decode(file_get_contents(".htsettings.json"), true);
 	$files = null;
 	for ($i = 0; $i < count($settings["sources"]); $i++)
 	{
