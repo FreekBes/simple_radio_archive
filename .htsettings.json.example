@@ -63,7 +63,8 @@
 		}
 	],
 	"scrobbler": {
-		"api_key": null
+		"api_key": null,
+		"api_secret": null
 	},
 	"tlcreator": {
 		"artist_split_fix": {

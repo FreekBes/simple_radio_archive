@@ -167,6 +167,9 @@ var aPlayer = {
 
 		progressBar.setValue(0);
 		progressBar.setValueBuffer(0);
+		tlHandler.lastPlayIndex = -1;
+		tlHandler.beenPlayingFor = 0;
+		scrobbler.nowPlayingUpdated = false;
 		document.getElementById("player-art").src = mdArtwork;
 		document.getElementById("player-title").innerHTML = mdTitle;
 		document.getElementById("player-show").innerHTML = mdShow;
@@ -228,6 +231,9 @@ var aPlayer = {
 
 		progressBar.setValue(0);
 		progressBar.setValueBuffer(0);
+		tlHandler.lastPlayIndex = -1;
+		tlHandler.beenPlayingFor = 0;
+		scrobbler.nowPlayingUpdated = false;
 		document.getElementById("player-art").src = mdArtwork;
 		document.getElementById("player-title").innerHTML = mdTitle;
 		document.getElementById("player-show").innerHTML = mdShow;

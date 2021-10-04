@@ -73,6 +73,7 @@
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="icon" type="image/ico" href="favicon.ico" />
 	<meta name="debug-time" content="<?PHP echo date("Y-m-d H:i:s"); ?>" />
+	<meta name="scrobbler-api-key" content="<?PHP echo $settings["scrobbler"]["api_key"]; ?>" />
 	<meta name="mobile-web-app-capable" content="yes" />
 	<meta name="theme-color" content="#127940" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -243,6 +244,7 @@
 	</div>
 	<script type="application/javascript" src="progressbar.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="bt.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="scrobbler.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="tlhandler.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="player.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="kbd.js?v=<?php echo $v; ?>"></script>
