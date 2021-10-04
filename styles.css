@@ -547,13 +547,16 @@ nav button:disabled {
 
 .wavesurfer-region {
 	z-index: 4 !important;
+	height: 50% !important;
+	border-top: 1px solid black !important;
+	border-bottom: 1px solid black !important;
 }
 
 .wavesurfer-region.active {
 	border-top: 4px solid red !important;
 	border-bottom: 4px solid red !important;
 	background-color: rgba(255, 0, 0, 0.3) !important;
-	height: calc(100% - 8px) !important;
+	height: calc(50% - 8px) !important;
 }
 
 .wavesurfer-region.active > .wavesurfer-handle {
