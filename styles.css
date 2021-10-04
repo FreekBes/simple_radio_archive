@@ -556,7 +556,7 @@ nav button:disabled {
 	border-top: 4px solid red !important;
 	border-bottom: 4px solid red !important;
 	background-color: rgba(255, 0, 0, 0.3) !important;
-	height: calc(50% - 8px) !important;
+	height: calc(50% - 6px) !important;
 }
 
 .wavesurfer-region.active > .wavesurfer-handle {
@@ -573,10 +573,15 @@ nav button:disabled {
 	font-size: 11px;
 	text-shadow: 0 0 3px #000;
 	text-align: left;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	width: calc(100% - 14px);
 }
 
 .wavesurfer-region.active::after {
 	padding: 0px 6px 6px 6px;
+	white-space: normal;
 }
 
 #editor button {
