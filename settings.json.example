@@ -61,5 +61,11 @@
 				"type": ["ogg", "mp3"]
 			}
 		}
-	]
+	],
+	"tlcreator": {
+		"artist_split_fix": {
+			"aly": "Aly & Fila",
+			"fila": null
+		}
+	}
 }

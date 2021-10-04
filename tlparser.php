@@ -76,6 +76,8 @@
 	</style>
 	<script>
 	var artistsRegex = /\s\&\s|\sand\s|\swith\s|\sx\s|,\s|\svs\s|\svs\.\s|\sversus\s|\smeets\s|\sfeat\s|\sfeat\.\s|\sfeaturing\s|\spres\s|\spres\.\s|\spresents\s+/gm;
+	var artistsFix = {};
+
 	function closeMySelf() {
 		var list = [];
 		var templist;
@@ -114,6 +116,13 @@
 					templist[i][1] = templist[i][1].replace(/\(.*\)+/gm, "");
 					for (var j = 0; j < templist[i][0].length; j++) {
 						templist[i][0][j] = templist[i][0][j].trim();
+						if (artistsFix[templist[i][0][j].toLowerCase()] !== undefined) {
+							templist[i][0][j] = artistsFix[templist[i][0][j].toLowerCase()];
+						}
+						else if (artistsFix[templist[i][0][j].toLowerCase()] === null) {
+							templist[i][0].splice(j, 1);
+							j--;
+						}
 					}
 					templist[i][1] = templist[i][1].trim();
 					templist[i][2] = templist[i][2].trim();
@@ -152,6 +161,22 @@
 		}
 		return false;
 	}
+
+	var jsonReq = new XMLHttpRequest();
+	jsonReq.addEventListener("load", function() {
+		try {
+			var settings = JSON.parse(this.responseText);
+			artistsFix = settings["tlcreator"]["artist_split_fix"];
+		}
+		catch (err) {
+			console.error(err);
+		}
+	});
+	jsonReq.addEventListener("error", function(err) {
+		console.error(err);
+	});
+	jsonReq.open("GET", "settings.json");
+	jsonReq.send();
 	</script>
 </head>
 <body>
