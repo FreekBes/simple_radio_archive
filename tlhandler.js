@@ -49,7 +49,7 @@ var tlHandler = {
 					}
 				}
 				var extraText = "";
-				if (tlHandler.list[i].override != null) {
+				if (tlHandler.list[i].override != null && tlHandler.list[i].override != "") {
 					extraText = tlHandler.list[i].override;
 				}
 				else {
@@ -63,9 +63,6 @@ var tlHandler = {
 				}
 				document.getElementById("player-extra").innerHTML = extraText;
 				return;
-			}
-			else if (tlHandler.list[i].from > currentTime) {
-				break;
 			}
 		}
 		if ('mediaSession' in navigator) {
@@ -92,9 +89,6 @@ var tlHandler = {
 					}
 				}
 				return extraText;
-			}
-			else if (tlHandler.list[i].from > currentTime) {
-				break;
 			}
 		}
 		return null;
