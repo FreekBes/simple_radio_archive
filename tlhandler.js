@@ -40,6 +40,7 @@ var tlHandler = {
 			if (currentTime >= tlHandler.list[i].from && currentTime < tlHandler.list[i].to) {
 				if (tlHandler.list[i].skip === true) {
 					aPlayer.seekTo(tlHandler.list[i].to);
+					tlHandler.handle(tlHandler.list[i].to);
 					return;
 				}
 				if (tlHandler.lastPlayIndex != i || forced === true) {
@@ -65,7 +66,9 @@ var tlHandler = {
 					}
 					var extraText = "";
 					if (tlHandler.list[i].override != null && tlHandler.list[i].override != "") {
-						extraText = tlHandler.list[i].override;
+						if (tlHandler.list[i].override.trim() != "") {
+							extraText = tlHandler.list[i].override;
+						}
 					}
 					else {
 						if (tlHandler.list[i].radio_section != null) {
@@ -91,6 +94,9 @@ var tlHandler = {
 		if ('mediaSession' in navigator) {
 			navigator.mediaSession.metadata.artist = "";
 			navigator.mediaSession.metadata.title = "";
+			tlHandler.lastPlayIndex = -1;
+			tlHandler.beenPlayingFor = 0;
+			scrobbler.nowPlayingUpdated = false;
 		}
 		document.getElementById("player-extra").innerHTML = "";
 	},
@@ -104,6 +110,9 @@ var tlHandler = {
 		for (var i = 0; i < tlHandler.list.length; i++) {
 			if (currentTime >= tlHandler.list[i].from && currentTime < tlHandler.list[i].to) {
 				if (tlHandler.list[i].override != null) {
+					if (tlHandler.list[i].override.trim() == "") {
+						return "";
+					}
 					extraText = tlHandler.list[i].override;
 				}
 				else {

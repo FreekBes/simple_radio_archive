@@ -366,7 +366,7 @@ var aPlayer = {
 
 	seekTo: function(time) {
 		aPlayer.audio.currentTime = time;
-		tlHandler.handle(time, true);
+		tlHandler.handle(time);
 	},
 
 	skipBack: function() {
