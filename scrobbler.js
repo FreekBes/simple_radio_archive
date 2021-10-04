@@ -6,11 +6,13 @@ var scrobbler = {
 	scrobbleReq: null,
 
 	startAuth: function() {
-		var w = 500;
-		var h = 700;
-		var y = window.top.outerHeight / 2 + window.top.screenY - ( h / 2);
-		var x = window.top.outerWidth / 2 + window.top.screenX - ( w / 2);
-		var authWindow = window.open("scrobbler.php?check=true", "authwindow", "location=no,menubar=no,status=no,toolbar=no,directories=no,scrollbars=no,width="+w+",height="+h+",top="+y+",left="+x);
+		if (scrobbler.canEnable) {
+			var w = 500;
+			var h = 700;
+			var y = window.top.outerHeight / 2 + window.top.screenY - ( h / 2);
+			var x = window.top.outerWidth / 2 + window.top.screenX - ( w / 2);
+			var authWindow = window.open("scrobbler.php?check=true", "authwindow", "location=no,menubar=no,status=no,toolbar=no,directories=no,scrollbars=no,width="+w+",height="+h+",top="+y+",left="+x);
+		}
 	},
 
 	updateNowPlaying: function(track) {

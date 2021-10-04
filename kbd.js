@@ -92,6 +92,9 @@ window.addEventListener("keydown", function(e) {
 			case 85:	// [U]
 				aPlayer.unformattedSeconds = true;
 				break;
+			case 83:	// [S]
+				scrobbler.startAuth();
+				break;
 			case 116:	// [F5]
 				window.location.reload();
 				break;
