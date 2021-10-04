@@ -191,6 +191,9 @@ var tlCreator = {
 				overlayText += " (" + region.data.titleVersion + ")";
 			}
 		}
+		if (region.data.skip) {
+			overlayText = "[SKIP] " + overlayText;
+		}
 		region.element.setAttribute("data-txt-overlay", overlayText);
 	},
 
@@ -525,7 +528,15 @@ var tlCreator = {
 				console.log("pxPerSec: ", tlCreator.pxPerSec);
 			}
 			else {
-				document.getElementById("waveformdata").children[0].scrollLeft += event.deltaY;
+				if (tlCreator.wavesurfer.isPlaying() && event.deltaY < 0) {
+					tlCreator.wavesurfer.skipBackward();
+				}
+				else if (tlCreator.wavesurfer.isPlaying() && event.deltaY > 0) {
+					tlCreator.wavesurfer.skipForward();
+				}
+				else {
+					document.getElementById("waveformdata").children[0].scrollLeft += event.deltaY;
+				}
 			}
 		});
 
