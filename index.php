@@ -1,5 +1,5 @@
 <?php
-	$v = "2.5";
+	$v = "2.6";
 
 	function get_filename_struct_part($filename, $filename_struct, $struct_part)
 	{

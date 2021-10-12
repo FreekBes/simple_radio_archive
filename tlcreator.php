@@ -1,5 +1,5 @@
 <?php
-	$v = "2.5";
+	$v = "2.6";
 ?>
 <!DOCTYPE html>
 <html lang="en">
