@@ -23,7 +23,7 @@ window.addEventListener("keydown", function(e) {
 				break;
 			case 74:	// [J]
 			case 37:	// [ARROWLEFT]
-			aPlayer.skipBack();
+				aPlayer.skipBack();
 				break;
 			case 76:	// [L]
 			case 39:	// [ARROWRIGHT]

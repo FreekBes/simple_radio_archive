@@ -88,6 +88,15 @@
 	<div id="contents">
 		<header>
 			<h1><?php echo $settings["title"]; ?></h1>
+			<button class="material-icons" id="menu" onclick="$('#menu-container').toggle(); $(this).blur();">menu</button>
+			<div id="menu-container" style="display: none;">
+				<ul class="menu-list">
+					<li class="menu-list-item" tabindex="0" onclick="aPlayer.volumeUp(); $('#menu-container').toggle();">Volume up</li>
+					<li class="menu-list-item" tabindex="0" onclick="aPlayer.volumeDown(); $('#menu-container').toggle();">Volume down</li>
+					<li class="menu-list-item" tabindex="0" onclick="scrobbler.startAuth(); $('#menu-container').toggle();">Connect to Last.fm</li>
+					<li class="menu-list-item" tabindex="0" onclick="searchBLEDom(); $('#menu-container').toggle();">Connect to Bluetooth LEDs</li>
+				</ul>
+			</div>
 		</header>
 		<main>
 			<?php foreach($settings["sources"] as $source)
