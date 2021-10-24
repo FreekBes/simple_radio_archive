@@ -40,14 +40,15 @@
 	if (isset($_GET["check"])) {
 		if (!isset($_SESSION["lastfm_access_token"]) || empty($_SESSION["lastfm_access_token"])) {
 			header("Location: http://www.last.fm/api/auth/?api_key=".urlencode($appKey)."&cb=".urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']));
-			http_response_code(302);
+			http_response_code(307);
 		}
 		else {
 			header("Location: ?connected=true");
 			http_response_code(303);
 		}
 	}
-	else if (isset($_GET["connected"])) {
+	else if (isset($_GET["connected"]) && isset($_SESSION["lastfm_access_token"]) && !empty($_SESSION["lastfm_access_token"])) {
+		http_response_code(200);
 		?>
 		<script>
 			window.opener.scrobbler.enabled = true;
@@ -59,7 +60,7 @@
 	else if (isset($_GET["updatenp"])) {
 		if (!isset($_SESSION["lastfm_access_token"]) || empty($_SESSION["lastfm_access_token"])) {
 			echo '<b>Could not scrobble track.</b><br>Details: no Last.fm access token was found in the current session. Please re-authenticate.';
-			http_response_code(400);
+			http_response_code(401);
 			exit();
 		}
 		if (!isset($_GET["artist"]) || !isset($_GET["duration"]) || !isset($_GET["title"])) {
@@ -82,17 +83,17 @@
 		curl_close($ch);
 
 		if ($response !== false) {
-			http_response_code(200);
+			http_response_code(201);
 		}
 		else {
-			http_response_code(500);
+			http_response_code(503);
 		}
 		echo $response;
 	}
 	else if (isset($_GET["scrobble"])) {
 		if (!isset($_SESSION["lastfm_access_token"]) || empty($_SESSION["lastfm_access_token"])) {
 			echo '<b>Could not scrobble track.</b><br>Details: no Last.fm access token was found in the current session. Please re-authenticate.';
-			http_response_code(400);
+			http_response_code(401);
 			exit();
 		}
 		if (!isset($_GET["artist"]) || !isset($_GET["duration"]) || !isset($_GET["title"])) {
@@ -117,10 +118,10 @@
 		curl_close($ch);
 
 		if ($response !== false) {
-			http_response_code(200);
+			http_response_code(201);
 		}
 		else {
-			http_response_code(500);
+			http_response_code(503);
 		}
 		echo $response;
 	}
@@ -150,8 +151,8 @@
 			$xml = simplexml_load_string($response);
 			$_SESSION["lastfm_access_token"] = (string)$xml->session->key;
 			echo "<b>Connected to Last.fm successfully</b>";
-			http_response_code(201);
 			header("Location: ?connected=true");
+			http_response_code(303);
 		}
 		else {
 			echo '<b>Could not connect Last.fm.</b><br>Details: could not exchange authorization code for access token.<br>Response:<br><br>';

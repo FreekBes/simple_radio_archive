@@ -28,7 +28,7 @@ var scrobbler = {
 		var trackTitle = track.title + (track.title_version ? " - " + track.title_version : "");
 		scrobbler.npReq = new XMLHttpRequest();
 		scrobbler.npReq.addEventListener("load", function() {
-			if (this.status != 200) {
+			if (this.status != 201) {
 				console.error("Last.fm updateNowPlaying failed: ", this.responseText);
 			}
 			else {
@@ -52,7 +52,7 @@ var scrobbler = {
 		var trackTitle = track.title + (track.title_version ? " - " + track.title_version : "");
 		scrobbler.scrobbleReq = new XMLHttpRequest();
 		scrobbler.scrobbleReq.addEventListener("load", function() {
-			if (this.status != 200) {
+			if (this.status != 201) {
 				console.error("Last.fm updateNowPlaying failed: ", this.responseText);
 			}
 			else {
