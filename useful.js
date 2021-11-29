@@ -1,8 +1,3 @@
-var loc = window.location.href+'';
-if (loc.indexOf('http://') == 0) {
-	window.location.href = loc.replace('http://','https://');
-}
-
 function hexToRgb(hex) {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
