@@ -79,13 +79,34 @@
 	var artistsRegex = /\s\&\s|\sand\s|\swith\s|\sx\s|,\s|\svs\s|\svs\.\s|\sversus\s|\smeets\s|\sfeat\s|\sfeat\.\s|\sft\.\s|\sft\s|\sfeaturing\s|\spres\s|\spres\.\s|\spresents\s+/gm;
 	var artistsFix = <?php echo json_encode(json_decode(file_get_contents(".htsettings.json"), true)["tlcreator"]["artist_split_fix"]); ?>;
 
+	function getStartTimeFromStr(str) {
+		var startTime = 0;
+		var times = str.split(" ", 1)[0];
+		times = times.split(":");
+		if (times.length == 2) {
+			var m = parseInt(times[0]);
+			var s = parseInt(times[1]);
+			startTime = m * 60 + s;
+		}
+		else if (times.length == 3) {
+			var u = parseInt(times[0]);
+			var m = parseInt(times[1]);
+			var s = parseInt(times[2]);
+			startTime = u * 3600 + m * 60 + s;
+		}
+		return startTime;
+	}
+
 	function closeMySelf() {
 		var list = [];
 		var templist;
 		var trackObj = null;
 		var tempSection = null;
+		var startTime = null;
+		var endTime = null;
 		var input = document.getElementById("listfield").value;
 		var fromJSON = false;
+		var withTimes = false;
 
 		input = input.replace(/[\u2018\u2019\u0060\u00b4]/g, "'");
 		input = input.replace(/[\u201c\u201d]/g, "\"");
@@ -101,15 +122,36 @@
 		}
 		else {
 			templist = input.split("\n");
+			if (templist[0].search(/[0-9]:[0-9]{2}/g) > -1) {
+				// includes timestamps, assume from youtube
+				withTimes = true;
+				console.log("Timestamp found in first line. Parsing the tracklist with times.");
+			}
 			try {
 				for (var i = 0; i < templist.length; i++) {
+					if (withTimes) {
+						startTime = getStartTimeFromStr(templist[i]);
+						if (i != templist.length - 1) {
+							endTime = getStartTimeFromStr(templist[i + 1]);
+						}
+						else {
+							endTime = null;
+						}
+					}
 					templist[i] = templist[i].split(/\s-\s|\s–\s+/gm);
-					if (templist[i][0].indexOf(":") > -1) {
-						tempSection = templist[i][0].split(": ")[0];
-						templist[i][0] = templist[i][0].split(": ").pop();
+					if (!withTimes) {
+						if (templist[i][0].indexOf(": ") > -1) {
+							tempSection = templist[i][0].split(": ")[0];
+							templist[i][0] = templist[i][0].split(": ").pop();
+						}
+						else {
+							tempSection = null;
+						}
 					}
 					else {
-						tempSection = null;
+						var artistStart = templist[i][0].search(/[0-9]\s/g) + 2;
+						templist[i][0] = templist[i][0].substring(artistStart);
+						console.log(artistStart);
 					}
 					templist[i][0] = templist[i][0].split(artistsRegex);
 					templist[i][1] = templist[i][1].replace(/\[.*\]+/gm, "");
@@ -128,8 +170,8 @@
 					templist[i][1] = templist[i][1].trim();
 					templist[i][2] = templist[i][2].trim();
 					trackObj = {
-						from: 0,
-						to: 0,
+						from: (withTimes ? startTime : 0),
+						to: (withTimes ? endTime : 0),
 						artists: templist[i][0],
 						title: templist[i][1],
 						title_version: templist[i][2],
@@ -148,7 +190,7 @@
 		try {
 			console.log(list);
 			window.opener.console.log(list);
-			if (fromJSON) {
+			if (fromJSON || withTimes) {
 				window.opener.tlCreator.loadList(list);
 			}
 			else {

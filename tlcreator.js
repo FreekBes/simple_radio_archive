@@ -14,7 +14,7 @@ var tlCreator = {
 		for (var i = 0; i < list.length; i++) {
 			tlCreator.wavesurfer.regions.add({
 				start: list[i].from,
-				end: list[i].to,
+				end: (list[i].to ? list[i].to : Math.floor(tlCreator.wavesurfer.getDuration())),
 				drag: true,
 				resize: true,
 				preventContextMenu: true,
