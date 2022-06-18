@@ -206,7 +206,12 @@ var aPlayer = {
 		document.getElementsByTagName("footer")[0].style.bottom = "0px";
 
 		aPlayer.cur = num;
-		aPlayer.audio.src = audioSrc;
+		aPlayer.audio.innerHTML = ''; // remove all sources
+		var srcElem = document.createElement("source");
+		srcElem.setAttribute("type", "audio/"+audioSrc.split(".").pop());
+		srcElem.setAttribute("src", audioSrc);
+		aPlayer.audio.append(srcElem);
+		aPlayer.audio.load();
 		aPlayer.play();
 	},
 
@@ -263,12 +268,14 @@ var aPlayer = {
 		document.getElementsByTagName("footer")[0].style.bottom = "0px";
 
 		aPlayer.cur = -2;
-
+		aPlayer.audio.innerHTML = ''; // remove all sources
 		sources.forEach(function(source) {
-			var srcElem = document.createElement("source");
-			srcElem.setAttribute("type", source["type"]);
-			srcElem.setAttribute("src", source["url"]);
-			aPlayer.audio.append(srcElem);
+			if (aPlayer.audio.canPlayType(source["type"]) == "probably") {
+				var srcElem = document.createElement("source");
+				srcElem.setAttribute("type", source["type"]);
+				srcElem.setAttribute("src", source["url"]);
+				aPlayer.audio.append(srcElem);
+			}
 		});
 		aPlayer.audio.load();
 		aPlayer.play();
