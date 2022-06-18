@@ -11,7 +11,18 @@
 				"source": {
 					"name": "Name of the radio station",
 					"website": "https://www.example.com/",
-					"livestream_url": "https://www.example.com/icecast.mp3",
+					"streams": [
+						{
+							"url": "https://example.com/stream.aac",
+							"bitrate": 96,
+							"type": "audio/aac"
+						},
+						{
+							"url": "https://example.com/stream",
+							"bitrate": 96,
+							"type": "audio/mp3"
+						}
+					],
 					"streamripper_fix_enabled": false,
 					"schedule": [
 						{
@@ -36,24 +47,11 @@
 				"default_img": "radio2/img.jpg",
 				"language": "NLD",
 				"source": {
-					"name": "Another radio station",
+					"name": "Another radio station, but without a livestream",
 					"website": "https://www.example.com/",
-					"livestream_url": "https://www.example.com/icecast2.ogg",
+					"streams": [],
 					"streamripper_fix_enabled": false,
-					"schedule": [
-						{
-							"day": 0,
-							"hour": 22,
-							"minute": 0,
-							"duration": 120
-						},
-						{
-							"day": 6,
-							"hour": 9,
-							"minute": 30,
-							"duration": 60
-						}
-					]
+					"schedule": []
 				}
 			},
 			"files": {

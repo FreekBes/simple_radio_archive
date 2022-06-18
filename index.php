@@ -37,16 +37,16 @@
 		return array($nextStart, $nextEnd);
 	}
 
-	function add_live_episode($schedule, $stream_url, $station, $showname, $ep_num, $coverart, $is_live)
+	function add_live_episode($schedule, $streams, $station, $showname, $ep_num, $coverart, $is_live)
 	{
-		if (count($schedule) > 0 && !empty($stream_url))
+		if (count($schedule) > 0 && count($streams) > 0)
 		{
 			$times = get_next_broadcast_times($schedule);
 			$date = date("Y-m-d", $times[0]);
 			$ep_name = "Episode " . intval($ep_num);
 			$coverart_dimens = getimagesize($coverart);
 			$coverart_dimens = $coverart_dimens[0] . "x" . $coverart_dimens[1];
-			echo '<a '.($is_live ? '' : 'style="display: none;" ').'class="live" href="'.$stream_url.'" data-schedule="'.implode('/', $times).'" data-schedule-readable="'.date("Y-m-d H:i:s", $times[0]).'/'.date("Y-m-d H:i:s", $times[1]).'" data-radio="'.$station.'" data-show="'.$showname.'" data-epnum="'.$ep_num.'" data-epname="'.$ep_name.'" data-art="'.$coverart.'" data-artsize="'.$coverart_dimens.'" data-date="'.$date.'" data-tracklist="null" onclick="event.preventDefault(); aPlayer.openLive(this); this.blur(); return false;"><img loading="lazy" src="'.$coverart.'" /><b>'.$ep_name.'</b><br><small><i>Live right now!</i></small></a>';
+			echo '<a '.($is_live ? '' : 'style="display: none;" ').'class="live" href="'.$streams[0]["url"].'" data-streams="'.htmlspecialchars(json_encode($streams), ENT_QUOTES, 'UTF-8').'" data-schedule="'.implode('/', $times).'" data-schedule-readable="'.date("Y-m-d H:i:s", $times[0]).'/'.date("Y-m-d H:i:s", $times[1]).'" data-radio="'.$station.'" data-show="'.$showname.'" data-epnum="'.$ep_num.'" data-epname="'.$ep_name.'" data-art="'.$coverart.'" data-artsize="'.$coverart_dimens.'" data-date="'.$date.'" data-tracklist="null" onclick="event.preventDefault(); aPlayer.openLive(this); this.blur(); return false;"><img loading="lazy" src="'.$coverart.'" /><b>'.$ep_name.'</b><br><small><i>Live right now!</i></small></a>';
 		}
 	}
 
@@ -111,7 +111,7 @@
 				}
 				if (empty($source["eps"]))
 				{
-					add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], 1, $source["metadata"]["default_img"], false);
+					add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["streams"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], 1, $source["metadata"]["default_img"], false);
 					echo '<p class="no-eps">No episodes have been uploaded as of yet.</p>';
 				}
 				else
@@ -153,11 +153,11 @@
 							$firstAdded = true;
 							if (time() >= $schedule[0] && time() < $schedule[1] && $source["metadata"]["source"]["streamripper_fix_enabled"])
 							{
-								add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], $ep_num, $source["metadata"]["default_img"], true);
+								add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["streams"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], $ep_num, $source["metadata"]["default_img"], true);
 								continue;
 							}
 							else {
-								add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["livestream_url"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], $ep_num+1, $source["metadata"]["default_img"], false);
+								add_live_episode($source["metadata"]["source"]["schedule"], $source["metadata"]["source"]["streams"], $source["metadata"]["source"]["name"], $source["metadata"]["name"], $ep_num+1, $source["metadata"]["default_img"], false);
 							}
 						}
 						if ($c == 11)

@@ -39,7 +39,7 @@ Add a schedule to the .htsettings.json file like in the example.
 
 Add as many schedule listings as you want. Seperate them with commas. If you don't understand how, please look up how JSON formatting works.
 
-After you've added your schedule, you'll need to add a livestream URL in the .htsettings.json file as well. In order to play this audiostream directly in the web portal, the stream needs to be non-CORS restricted. If it is not, most major web browsers will refuse to play the content. Users will still be able to open the stream in a new tab though.
+After you've added your schedule, you'll need to add at least one livestream URL in the .htsettings.json file as well. Look at the example .htsettings.json file for an example. In order to play an audiostream directly in the web portal, the stream needs to be non-CORS restricted. If it is not, most major web browsers will refuse to play the content. Users will still be able to open the stream in a new tab though. Also, keep in mind that the first audio stream listed will take priority - if it cannot be played from, the second will be used, and so on.
 
 If you're using streamripper to rip the episode directly into the folder listed in .htsettings.json, enable the streamripper fix by setting "streamripper_fix_enabled" to true in .htsettings.json. If you do not do this, the livestream will likely display the wrong episode number while ripping the stream, and the incomplete stream rip will be visible in the web portal.
 

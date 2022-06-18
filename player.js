@@ -215,7 +215,9 @@ var aPlayer = {
 			aPlayer.init();
 		}
 
-		var audioSrc = elem.href;
+		var sources = [];
+		try { sources = JSON.parse(elem.getAttribute("data-streams")); }
+		catch (e) { console.warn("Unable to parse data-streams from live episode"); }
 		var mdTitle = elem.getAttribute("data-epname");
 		var mdRadio = elem.getAttribute("data-radio");
 		var mdShow = elem.getAttribute("data-show");
@@ -261,7 +263,14 @@ var aPlayer = {
 		document.getElementsByTagName("footer")[0].style.bottom = "0px";
 
 		aPlayer.cur = -2;
-		aPlayer.audio.src = audioSrc;
+
+		sources.forEach(function(source) {
+			var srcElem = document.createElement("source");
+			srcElem.setAttribute("type", source["type"]);
+			srcElem.setAttribute("src", source["url"]);
+			aPlayer.audio.append(srcElem);
+		});
+		aPlayer.audio.load();
 		aPlayer.play();
 	},
 
