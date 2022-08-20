@@ -181,6 +181,21 @@ h2 {
 	display: none;
 }
 
+.ep[data-tracklist]:not([data-tracklist="null"])::before {
+	box-shadow: 0 -4px 4px rgba(0,0,0,.28), 0 0 2px rgba(0,0,0,.4);
+	content: 'TRACKLIST';
+	padding: 2px 4px;
+	color: #FFFFFF;
+	background: rgba(0,0,0,0.55);
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	font-size: xx-small;
+	font-weight: bold;
+	border-radius: 3px;
+	backdrop-filter: blur(4px);
+}
+
 .show-more {
 	display: block;
 	width: 90%;
@@ -219,16 +234,16 @@ h2 {
 	pointer-events: none;
 }
 
-.live:before {
+.live::before {
 	box-shadow: 0 -4px 8px rgba(0,0,0,.28), 0 0 4px rgba(0,0,0,.4);
-	content: "LIVE";
+	content: 'LIVE';
 	padding: 2px 4px;
 	color: #FFFFFF;
 	background: #D81515;
 	position: absolute;
 	top: 12px;
 	right: 12px;
-	font-size: 10px;
+	font-size: xx-small;
 	font-weight: bold;
 	border-radius: 3px;
 	opacity: 1;
