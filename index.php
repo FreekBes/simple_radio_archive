@@ -188,7 +188,7 @@
 							livestreams[c].style.display = "inline-block";
 							livestreams[c].className = "live anim";
 							notHiddenEps = livestreams[c].parentNode.querySelectorAll(".ep:not(.hidden)");
-							if (notHiddenEps.length > 0)
+							if (notHiddenEps.length > 9)
 							{
 								notHiddenEps[notHiddenEps.length - 1].className = "ep hidden";
 							}
