@@ -71,6 +71,7 @@
 	<title><?php echo $settings["title"]; ?></title>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="styles/main.css?v=<?php echo $v; ?>" />
+	<link rel="stylesheet" type="text/css" href="styles/visualizers.css?v=<?php echo $v; ?>" />
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="icon" type="image/ico" href="favicon.ico" />
 	<meta name="debug-time" content="<?PHP echo date("Y-m-d H:i:s"); ?>" />
@@ -256,6 +257,18 @@
 	<script type="application/javascript" src="js/lib/bt.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="js/lib/scrobbler.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="js/lib/tlhandler.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="js/lib/visualizer.js?v=<?php echo $v; ?>"></script>
+	<?php
+	// add all javacsript files from the js/visualizers folder to the html file
+	$visualizers = scandir("js/visualizers");
+	foreach ($visualizers as $visualizer)
+	{
+		if (substr($visualizer, -3) == ".js")
+		{
+			echo '<script type="application/javascript" src="js/visualizers/' . $visualizer . '?v=' . $v . '"></script>';
+		}
+	}
+	?>
 	<script type="application/javascript" src="js/player.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="js/kbd.js?v=<?php echo $v; ?>"></script>
 </body>

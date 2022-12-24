@@ -35,8 +35,6 @@ var aPlayer = {
 		this.analyser = this.audioContext.createAnalyser();
 		this.analyser.fftsize = 2048;
 		this.analyser.smoothingTimeConstant = 0.8;
-		this.bufferLength = this.analyser.frequencyBinCount;
-		this.dataArray = new Uint8Array(this.bufferLength);
 		this.source = this.audioContext.createMediaElementSource(this.audio);
 
 		// create filters
@@ -46,7 +44,6 @@ var aPlayer = {
 		this.gainNode = this.audioContext.createGain();
 		this.gainNode.gain.value = 1;
 
-
 		// connect all Web Audio API elements together
 		this.source.connect(this.filter);
 		this.filter.connect(this.gainNode);
@@ -54,6 +51,7 @@ var aPlayer = {
 		this.source.connect(this.audioContext.destination);
 		//this.gainNode.connect(this.audioContext.destination);
 
+		// set up action handlers for media session (lock screen controls)
 		if ('mediaSession' in navigator) {
 			navigator.mediaSession.metadata = new MediaMetadata({});
 			navigator.mediaSession.setActionHandler('play', this.play);
@@ -63,6 +61,7 @@ var aPlayer = {
 			navigator.mediaSession.playbackState = "none";
 		}
 
+		// update UI elements every half a second
 		setInterval(function() {
 			if (!progressBar.hovering && aPlayer.cur != -1) {
 				var ct = aPlayer.getCurrentTime();
@@ -90,63 +89,22 @@ var aPlayer = {
 			}
 		}, 500);
 
+		// add audio event listeners
 		this.audio.addEventListener("ended", function(event) {
 			console.log("Episode ended, skipping to next...");
 			aPlayer.next();
 		});
 
-		this.canvas.setAttribute("width", window.innerWidth);
-		this.canvas.setAttribute("height", window.innerHeight);
-		window.addEventListener("resize", function(event)
-		{
-			aPlayer.canvas.setAttribute("width", window.innerWidth);
-			aPlayer.canvas.setAttribute("height", window.innerHeight);
-		});
-		this.canvasContext = this.canvas.getContext("2d");
-		this.beatBar = 2;
-		this.fpsInterval = 1000 / 15;
-		this.lastFrameTime = Date.now();
-		this.drawVisuals = requestAnimationFrame(this.draw);
+		// set up visualizer handler
+		this.visualizer = new Visualizer(this.canvas, this.analyser);
+
+		// load basic visualizer
+		const basicVisualizer = new BasicVisualizer();
+		this.visualizer.setTheme(basicVisualizer);
+		// const vis = new BluetoothVisualizer();
+		// this.visualizer.setTheme(vis);
 	},
 
-	draw: function() {
-		aPlayer.analyser.getByteFrequencyData(aPlayer.dataArray);
-
-		var barWidth = (window.innerWidth / aPlayer.bufferLength) * 2.5;
-		var barHeight;
-		var x = 0;
-
-		aPlayer.canvasContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
-		for (var i = 0; i < aPlayer.bufferLength; i++) {
-			barHeight = aPlayer.dataArray[i] * Math.floor(window.innerHeight / 142);
-			aPlayer.canvasContext.fillStyle = 'rgb(18, ' + (aPlayer.dataArray[i] + 64) + ',64)';
-			aPlayer.canvasContext.fillRect(x, window.innerHeight - barHeight / 2, barWidth, barHeight);
-			aPlayer.canvasContext.fillRect(window.innerWidth - x - barWidth, window.innerHeight - barHeight / 2, barWidth, barHeight);
-
-			x += barWidth + 1;
-		}
-
-		var now = Date.now();
-		var elapsed = now - aPlayer.lastFrameTime;
-
-		if (elapsed > aPlayer.fpsInterval) {
-			aPlayer.lastFrameTime = now - (elapsed % aPlayer.fpsInterval);
-			// var bPerc = 1.8 * Math.ceil(aPlayer.dataArray[aPlayer.beatBar] / 255 * 100) - 80;
-			// var bPerc = 3.5 * Math.ceil(aPlayer.dataArray[aPlayer.beatBar] / 255 * 100) - 250;
-			var bPerc = 0.13 * Math.pow((Math.ceil(aPlayer.dataArray[aPlayer.beatBar] / 255 * 100) - 70), 2);
-			//console.log(aPlayer.dataArray[2] + " wordt " + Math.ceil(aPlayer.dataArray[aPlayer.beatBar] / 255 * 100) + " wordt " + bPerc);
-			if (char != null) {
-				if (aPlayer.dataArray[2] > 0) {
-					//console.log(Math.ceil((255 / aPlayer.dataArray[2]) * 100));
-					setBrightness(bPerc);
-				}
-				else {
-					setBrightness(0);
-				}
-			}
-		}
-		requestAnimationFrame(aPlayer.draw);
-	},
 
 	open: function(num) {
 		if (!aPlayer.initialized) {

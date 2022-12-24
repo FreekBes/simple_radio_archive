@@ -116,18 +116,6 @@ header button:focus {
 	transition: background 0.05s;
 }
 
-#background {
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	width: 100%;
-	height: 100%;
-	z-index: -1;
-	background: #2A2A2A;
-}
-
 main {
 	text-align: center;
 	padding: 8px;
