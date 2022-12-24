@@ -187,6 +187,7 @@
 				alert("An error occurred while parsing track " + (i+1) + ":\n\n" + err.message);
 			}
 		}
+
 		try {
 			console.log(list);
 			window.opener.console.log(list);
@@ -205,12 +206,77 @@
 		return false;
 	}
 	</script>
+	<script>
+	function getAudioDuration(file) {
+		return new Promise(function(resolve, reject) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var audio = new Audio();
+				audio.addEventListener("error", function(err) {
+					reject(err);
+				});
+				audio.src = e.target.result;
+				audio.addEventListener("loadedmetadata", function() {
+					resolve(audio.duration);
+				});
+			};
+			reader.onerror = function(err) {
+				reject(err);
+			};
+			reader.readAsDataURL(file);
+		});
+	}
+
+	async function parseFolder() {
+		var files = document.getElementById("filefield").files;
+		var list = [];
+		var start = 0;
+		for (var file of files) {
+			if (file.type.indexOf("audio") > -1) {
+				try {
+					var duration = Math.round(await getAudioDuration(file));
+					var trackObj = {
+						from: start,
+						to: start + duration,
+						artists: [""],
+						title: "",
+						title_version: null,
+						radio_section: null,
+						override: null,
+						skip: false
+					};
+					list.push(trackObj);
+					start += duration;
+				}
+				catch (err) {
+					console.error(err);
+				}
+			}
+		}
+
+		try {
+			console.log(list);
+			window.opener.console.log(list);
+			window.opener.tlCreator.loadList(list);
+			window.opener.focus();
+			window.close();
+		}
+		catch (err) {
+			console.error(err);
+		}
+		return false;
+	}
+	</script>
 </head>
 <body>
 <form>
 	<label for="listfield">Enter a tracklist below, each track on a new line:</label>
 	<textarea id="listfield" name="listfield" placeholder="RADIO SECTION: Artist(s) - Title (Title Version)" autofocus></textarea>
-	<button type="submit" onclick="closeMySelf(); return false;" res>Import &amp; parse</button>
+	<button type="submit" onclick="closeMySelf(); return false;">Import &amp; parse</button>
+	<hr />
+	<label for="filefield">Or select a folder to parse times &amp; durations from...</label>
+	<input type="file" id="filefield" name="filefield" webkitdirectory mozdirectory msdirectory odirectory directory multiple />
+	<button type="submit" onclick="parseFolder(); return false;">Parse folder</button>
 </form>
 </body>
 </html>
