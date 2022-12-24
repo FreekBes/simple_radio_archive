@@ -7,13 +7,12 @@ body {
 html {
 	padding: 0px;
 	margin: 0px;
-	background-color: #2A2A2A;
+	background-color: #212121;
 	height: 100%;
 }
 
 body,
 #contents {
-	background-color: #333333;
 	color: #EDEDED;
 	caret-color: #EDEDED;
 	font-family: Roboto, Verdana, Arial, Sans-Serif;
@@ -30,6 +29,7 @@ body,
 
 #contents {
 	box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+	background-color: rgba(64, 64, 64, 0.32);
 }
 
 a,
@@ -120,6 +120,10 @@ main {
 	text-align: center;
 	padding: 8px;
 	padding-bottom: 64px;
+}
+
+main.blur {
+	backdrop-filter: blur(4px);
 }
 
 .source {
@@ -262,7 +266,8 @@ footer {
 }
 
 #playerwrapper {
-	background-color: #212121;
+	background-color: rgba(16, 16, 16, 0.96);
+	backdrop-filter: blur(4px);
 	box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
 }
 
@@ -409,7 +414,7 @@ footer button.player-ctrl:focus {
 
 #progressbar-outer #barbackground {
 	width: 100%;
-	background-color: #434343;
+	background-color: rgba(64, 64, 64, 0.96);
 	z-index: 1;
 }
 

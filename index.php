@@ -99,7 +99,7 @@
 				</ul>
 			</div>
 		</header>
-		<main>
+		<main class="blur">
 			<?php foreach($settings["sources"] as $source)
 { ?>
 			<div class="source">
