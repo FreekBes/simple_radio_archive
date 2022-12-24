@@ -21,7 +21,7 @@ class BluetoothVisualizer {
 				if (char) {
 					setBrightness(bPerc);
 				}
-				console.log(ctx.fillStyle);
+				ctx.fillStyle = 'rgb(18, 255 ,64, ' + (bPerc / 100) + ')';
 				ctx.fillRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
 			}
 			else {
