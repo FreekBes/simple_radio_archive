@@ -1,5 +1,5 @@
 <?php
-	$v = "2.6";
+	$v = "2.7";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,9 +7,10 @@
 	<meta name="robots" content="noindex" />
 	<title>Tracklist Creator</title>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="styles.css?v=<?php echo $v; ?>" />
-	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-	<link rel="icon" type="image/ico" href="favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/styles/main.css?v=<?php echo $v; ?>" />
+	<link rel="stylesheet" type="text/css" href="/styles/tlcreator.css?v=<?php echo $v; ?>" />
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	<link rel="icon" type="image/ico" href="/favicon.ico" />
 	<meta name="mobile-web-app-capable" content="yes" />
 	<meta name="theme-color" content="#127940" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -18,7 +19,7 @@
 	<script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script type="application/javascript" src="https://unpkg.com/wavesurfer.js"></script>
 	<script type="application/javascript" src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script>
-	<script type="application/javascript" src="useful.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="/js/lib/useful.js?v=<?php echo $v; ?>"></script>
 </head>
 <body style="max-width: inherit;">
 	<div id="contents" style="max-width: inherit;">

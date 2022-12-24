@@ -1,5 +1,5 @@
 <?php
-	$v = "2.6";
+	$v = "2.7";
 
 	function get_filename_struct_part($filename, $filename_struct, $struct_part)
 	{
@@ -70,7 +70,7 @@
 <?php if ($settings["noindex"] === true) { ?>	<meta name="robots" content="noindex" /><?php } ?>
 	<title><?php echo $settings["title"]; ?></title>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="styles.css?v=<?php echo $v; ?>" />
+	<link rel="stylesheet" type="text/css" href="styles/main.css?v=<?php echo $v; ?>" />
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="icon" type="image/ico" href="favicon.ico" />
 	<meta name="debug-time" content="<?PHP echo date("Y-m-d H:i:s"); ?>" />
@@ -81,7 +81,7 @@
 	<meta name="apple-mobile-web-app-title" content="<?php echo $settings["title"]; ?>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 	<script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script type="application/javascript" src="useful.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="js/lib/useful.js?v=<?php echo $v; ?>"></script>
 </head>
 <body>
 	<canvas id="background"></canvas>
@@ -252,11 +252,11 @@
 			</div>
 		</footer>
 	</div>
-	<script type="application/javascript" src="progressbar.js?v=<?php echo $v; ?>"></script>
-	<script type="application/javascript" src="bt.js?v=<?php echo $v; ?>"></script>
-	<script type="application/javascript" src="scrobbler.js?v=<?php echo $v; ?>"></script>
-	<script type="application/javascript" src="tlhandler.js?v=<?php echo $v; ?>"></script>
-	<script type="application/javascript" src="player.js?v=<?php echo $v; ?>"></script>
-	<script type="application/javascript" src="kbd.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="js/lib/progressbar.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="js/lib/bt.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="js/lib/scrobbler.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="js/lib/tlhandler.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="js/player.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="js/kbd.js?v=<?php echo $v; ?>"></script>
 </body>
 </html>

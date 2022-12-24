@@ -1,3 +1,5 @@
 .htsettings.json
 favicon.ico
 favicon.png
+audio/*
+!audio/README.txt
