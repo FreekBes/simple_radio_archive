@@ -82,6 +82,21 @@
 	<meta name="apple-mobile-web-app-title" content="<?php echo $settings["title"]; ?>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 	<script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/essentia.js@0.1.3/dist/essentia-wasm.web.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/essentia.js@0.1.3/dist/essentia.js-core.js"></script>
+	<script>
+	let essentia;
+
+	EssentiaWASM().then( function(EssentiaWasm) {
+		essentia = new Essentia(EssentiaWasm);
+		// prints version of the essentia wasm backend
+		console.log(essentia.version)
+		// prints all the available algorithms in essentia.js
+		console.log(essentia.algorithmNames);
+
+		// add your custom audio feature extraction callbacks here
+	});
+	</script> -->
 	<script type="application/javascript" src="js/lib/useful.js?v=<?php echo $v; ?>"></script>
 </head>
 <body>

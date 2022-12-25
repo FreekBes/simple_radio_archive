@@ -22,7 +22,7 @@ var aPlayer = {
 	startedPlayingAt: 0,
 	unformattedSeconds: false,
 
-	init: function() {
+	init: async function() {
 		this.initialized = true;
 		this.list = document.getElementsByClassName("ep");
 		this.epamount = this.list.length;
@@ -44,12 +44,31 @@ var aPlayer = {
 		this.gainNode = this.audioContext.createGain();
 		this.gainNode.gain.value = 1;
 
+		// add the beat detection worker
+		try {
+			await this.audioContext.audioWorklet.addModule("js/lib/workers/beatdetection.js");
+			this.beatDetectionNode = new AudioWorkletNode(this.audioContext, "beatdetection", {
+				processorOptions: {
+					someUsefulVariable: new Map([
+						[1, "one"],
+						[2, "two"]
+					])
+				}
+			});
+			console.log("Beat detection node set up");
+		}
+		catch (err) {
+			console.error("Error setting up beat detection node: " + err);
+		}
+
 		// connect all Web Audio API elements together
 		this.source.connect(this.filter);
 		this.filter.connect(this.gainNode);
 		this.gainNode.connect(this.analyser);
+		this.source.connect(this.beatDetectionNode);
 		this.source.connect(this.audioContext.destination);
-		//this.gainNode.connect(this.audioContext.destination);
+		// this.beatDetectionNode.connect(this.audioContext.destination);
+		// this.gainNode.connect(this.audioContext.destination);
 
 		// set up action handlers for media session (lock screen controls)
 		if ('mediaSession' in navigator) {
@@ -96,7 +115,7 @@ var aPlayer = {
 		});
 
 		// set up visualizer handler
-		this.visualizer = new Visualizer(this.canvas, this.analyser);
+		this.visualizer = new Visualizer(this.canvas, this.audioContext, this.analyser);
 
 		// load basic visualizer
 		const basicVisualizer = new BasicVisualizer();

@@ -1,5 +1,5 @@
 class Visualizer {
-	constructor(canvasElem, audioAnalyser) {
+	constructor(canvasElem, audioContext, audioAnalyser) {
 		// set up the canvas
 		this.canvas = canvasElem;
 		// this.canvas.setAttribute("width", 1920);
@@ -16,10 +16,13 @@ class Visualizer {
 		this.context.fillStyle = '#2A2A2A';
 		this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
+		// save the audio context for future manipulation
+		this.audioContext = audioContext;
+
 		// get the audio analyser
 		this.audioAnalyser = audioAnalyser;
 		this.bufferLength = this.audioAnalyser.frequencyBinCount;
-		this.audioBuffer = new Uint8Array(this.bufferLength);
+		this.freqBuffer = new Uint8Array(this.bufferLength);
 
 		// set the theme default
 		this.theme = null;
@@ -34,10 +37,18 @@ class Visualizer {
 
 	// render the visualizer (drawer function for animation frames)
 	render = () => {
-		this.audioAnalyser.getByteFrequencyData(this.audioBuffer);
+		// get audio data
+		this.audioAnalyser.getByteFrequencyData(this.freqBuffer);
+		// const audioBuffer = this.audioContext.createBuffer(1, 2.2 * this.audioContext.sampleRate, this.audioContext.sampleRate); // Get 2.2 seconds of audio data
+		// audioBuffer.copyToChannel(this.freqBuffer, 0, 0);
+
+		// call the theme's render function
 		if (this.theme && "render" in this.theme && typeof this.theme.render === 'function') {
-			this.theme.render(this.context, this.audioBuffer, this.bufferLength);
+			this.theme.render(this.context, this.freqBuffer, this.bufferLength);
 		}
+
+		// request the next animation frame - this is the magic that makes it work
+		// usually results in a framerate that is vsync'd to the monitor refresh rate
 		requestAnimationFrame(this.render);
 	};
 }
