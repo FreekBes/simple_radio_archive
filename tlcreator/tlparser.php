@@ -77,7 +77,7 @@
 	</style>
 	<script>
 	var artistsRegex = /\s\&\s|\sand\s|\swith\s|\sx\s|,\s|\svs\s|\svs\.\s|\sversus\s|\smeets\s|\sfeat\s|\sfeat\.\s|\sft\.\s|\sft\s|\sfeaturing\s|\spres\s|\spres\.\s|\spresents\s+/gm;
-	var artistsFix = <?php echo json_encode(json_decode(file_get_contents(".htsettings.json"), true)["tlcreator"]["artist_split_fix"]); ?>;
+	var artistsFix = <?php echo json_encode(json_decode(file_get_contents("../.htsettings.json"), true)["tlcreator"]["artist_split_fix"]); ?>;
 
 	function getStartTimeFromStr(str) {
 		var startTime = 0;
