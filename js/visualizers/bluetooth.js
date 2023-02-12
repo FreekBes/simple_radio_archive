@@ -5,9 +5,10 @@ class BluetoothVisualizer {
 		this.lastFrameTime = Date.now();
 	}
 
-	render(ctx, audioBuffer, bufferLength) {
+	render(ctx, themeColor, audioBuffer, bufferLength) {
 		const now = Date.now();
 		const elapsed = now - this.lastFrameTime;
+		const tinyThemeColor = tinycolor(themeColor);
 
 		if (elapsed > this.fpsInterval) {
 			ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
@@ -21,14 +22,16 @@ class BluetoothVisualizer {
 				if (char) {
 					setBrightness(bPerc);
 				}
-				ctx.fillStyle = 'rgb(18, 255 ,64, ' + (bPerc / 100) + ')';
+				// ctx.fillStyle = 'rgb(18, 255 ,64, ' + (bPerc / 100) + ')';
+				ctx.fillStyle = tinyThemeColor.saturate(10).setAlpha(bPerc / 100).toRgbString();
 				ctx.fillRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
 			}
 			else {
 				if (char) {
 					setBrightness(0);
 				}
-				ctx.fillStyle = 'rgb(18, 255 ,64, 0)';
+				// ctx.fillStyle = 'rgb(18, 255 ,64, 0)';
+				ctx.fillStyle = tinyThemeColor.setAlpha(0).toRgbString();
 				ctx.fillRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
 			}
 		}

@@ -1,5 +1,5 @@
 <?php
-	$v = "2.7";
+	$v = "2.8";
 
 	function get_filename_struct_part($filename, $filename_struct, $struct_part)
 	{
@@ -82,6 +82,8 @@
 	<meta name="apple-mobile-web-app-title" content="<?php echo $settings["title"]; ?>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 	<script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script type="application/javascript" src="/js/lib/import/tinycolor.min.js?v=<?php echo $v; ?>"></script>
+	<script type="application/javascript" src="/js/lib/import/Vibrant.min.js?v=<?php echo $v; ?>"></script>
 	<script type="application/javascript" src="js/lib/useful.js?v=<?php echo $v; ?>"></script>
 </head>
 <body>

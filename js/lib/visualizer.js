@@ -23,6 +23,7 @@ class Visualizer {
 
 		// set the theme default
 		this.theme = null;
+		this.themeColor = getComputedStyle(document.documentElement).getPropertyValue('--theme-color-light');
 
 		// start the visualizer
 		requestAnimationFrame(this.render);
@@ -32,11 +33,15 @@ class Visualizer {
 		this.theme = newTheme;
 	};
 
+	setThemeColor = (newThemeColor) => {
+		this.themeColor = newThemeColor;
+	};
+
 	// render the visualizer (drawer function for animation frames)
 	render = () => {
 		this.audioAnalyser.getByteFrequencyData(this.audioBuffer);
 		if (this.theme && "render" in this.theme && typeof this.theme.render === 'function') {
-			this.theme.render(this.context, this.audioBuffer, this.bufferLength);
+			this.theme.render(this.context, this.themeColor, this.audioBuffer, this.bufferLength);
 		}
 		requestAnimationFrame(this.render);
 	};

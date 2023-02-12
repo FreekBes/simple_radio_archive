@@ -1,3 +1,8 @@
+:root {
+	--theme-color: #127940;
+	--theme-color-light: #23AD61;
+}
+
 html,
 body {
 	display: block;
@@ -34,18 +39,18 @@ body,
 
 a,
 a:visited {
-	color: #127940;
+	color: var(--theme-color);
 }
 
 a:hover {
-	color: #23AD61;
+	color: var(--theme-color-light);
 }
 
 header {
 	display: block;
 	position: relative;
 	height: 56px;
-	background-color: #127940;
+	background-color: var(--theme-color);
 	color: #EDEDED;
 	white-space: nowrap;
 	padding: 0px 8px;
@@ -164,7 +169,7 @@ h2 {
 .live:hover,
 .live:focus {
 	background: rgba(255,255,255,.1) !important;
-	color: #23AD61;
+	color: var(--theme-color-light);
 	text-decoration: none;
 	outline: 0;
 }
@@ -419,7 +424,7 @@ footer button.player-ctrl:focus {
 }
 
 #progressbar-outer #progressbar {
-	background-color: #23AD61;
+	background-color: var(--theme-color-light);
 	transition: background-color 1s;
 	z-index: 3;
 }
@@ -436,7 +441,7 @@ footer button.player-ctrl:focus {
 	width: 10px;
 	height: 10px;
 	border-radius: 5px;
-	background-color: #23AD61;
+	background-color: var(--theme-color-light);
 	transition: background-color 1s;
 
 	position: absolute;

@@ -89,6 +89,22 @@ var aPlayer = {
 			}
 		}, 500);
 
+		// add event listener to artwork loading to change the theme color
+		document.getElementById("player-art").addEventListener("load", function(ev) {
+			// get primary color from image and update theme color
+			var vibrant = new Vibrant(ev.target, 64, 4);
+			var swatches = vibrant.swatches();
+			var vibrantColor = swatches["DarkVibrant"] ? swatches["DarkVibrant"].getHex() : "#127940"; // with fallback
+			var lightVibrantColor = swatches["Vibrant"] ? swatches["Vibrant"].getHex() : "#23AD61"; // with fallback
+			// set these colors as the theme color
+			var r = document.querySelector(':root');
+			r.style.setProperty('--theme-color', vibrantColor);
+			r.style.setProperty('--theme-color-light', lightVibrantColor);
+			aPlayer.visualizer.setThemeColor(lightVibrantColor);
+			// update html meta theme color
+			document.querySelector("meta[name=theme-color]").setAttribute("content", vibrantColor);
+		});
+
 		// add audio event listeners
 		this.audio.addEventListener("ended", function(event) {
 			console.log("Episode ended, skipping to next...");
@@ -119,12 +135,14 @@ var aPlayer = {
 		var mdDate = aPlayer.list[num].getAttribute("data-date");
 		var mdTracklist = aPlayer.list[num].getAttribute("data-tracklist");
 
+		// UI elements updated by the player
 		document.getElementById("play-pause").innerHTML = "play_circle_outline";
 		aPlayer.times.innerHTML = "";
 		aPlayer.startedPlayingAt = Math.floor(new Date().getTime() / 1000);
-
 		progressBar.setValue(0);
 		progressBar.setValueBuffer(0);
+
+		// UI elements updated for this stream
 		tlHandler.lastPlayIndex = -1;
 		tlHandler.beenPlayingFor = 0;
 		scrobbler.nowPlayingUpdated = false;
@@ -187,15 +205,19 @@ var aPlayer = {
 		var mdArtwork = elem.getAttribute("data-art");
 		var mdArtworkSize = elem.getAttribute("data-artsize");
 
-		document.getElementById("play-pause").innerHTML = "play_circle_outline";
-		aPlayer.times.innerHTML = "";
+		// Livestream schedule (start / end times of the stream)
 		aPlayer.schedule = elem.getAttribute("data-schedule").split("/");
 		aPlayer.schedule[0] = parseInt(aPlayer.schedule[0]);
 		aPlayer.schedule[1] = parseInt(aPlayer.schedule[1]);
 		aPlayer.startedPlayingAt = Math.floor(new Date().getTime() / 1000);
 
+		// UI elements updated by the player
+		document.getElementById("play-pause").innerHTML = "play_circle_outline";
+		aPlayer.times.innerHTML = "";
 		progressBar.setValue(0);
 		progressBar.setValueBuffer(0);
+
+		// UI elements for this stream
 		tlHandler.lastPlayIndex = -1;
 		tlHandler.beenPlayingFor = 0;
 		scrobbler.nowPlayingUpdated = false;
