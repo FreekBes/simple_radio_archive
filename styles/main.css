@@ -2,6 +2,7 @@ html,
 body {
 	display: block;
 	width: 100%;
+	cursor: default;
 }
 
 html {
@@ -18,7 +19,6 @@ body,
 	font-family: Roboto, Verdana, Arial, Sans-Serif;
 	font-size: 16px;
 	padding: 0px;
-	cursor: default;
 	width: 100%;
 	min-height: 100%;
 	min-width: 360px;
@@ -455,7 +455,7 @@ footer button.player-ctrl:focus {
 		width: 16px;
 		height: 16px;
 		border-radius: 8px;
-		right: -6px;
+		right: -8px;
 		top: -6px;
 	}
 }

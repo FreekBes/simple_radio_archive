@@ -59,7 +59,7 @@ var progressBar = {
 			window.addEventListener("touchcancel", progressBar.progressMouseLeave);
 
 			/* Cursor Styling */
-			var css = '* { cursor: inherit !important; } body { cursor: w-resize !important; } #player-extra { transition: none !important; }',
+			var css = '* { cursor: inherit !important; } body, #progressbar-outer { cursor: w-resize !important; } #player-extra { transition: none !important; }',
 			head = document.head || document.getElementsByTagName('head')[0],
 			style = document.createElement('style');
 			style.type = 'text/css';
