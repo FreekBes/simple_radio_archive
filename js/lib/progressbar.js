@@ -142,7 +142,9 @@ var progressBar = {
 			var timeToBeSet = (progressBar.getValue() / 100) * audDuration;
 			// aPlayer.seekTo(timeToBeSet);
 			aPlayer.updateTimes(timeToBeSet, audDuration);
-			document.getElementById("player-extra").innerHTML = tlHandler.getTrackTextAt(timeToBeSet);
+			if (tlHandler.enabled) {
+				document.getElementById("player-extra").innerHTML = tlHandler.getTrackTextAt(timeToBeSet);
+			}
 		}
 	},
 
